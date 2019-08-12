@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.ElectricalCheckMapper" >
+  <resultMap id="electricalCheckResultMap" type="sz.zp.cks.entity.ElectricalCheck" >
+    <id column="checks_id" property="checksId" jdbcType="VARCHAR" />
+    <result column="ep_id" property="epId" jdbcType="VARCHAR" />
+    <result column="status_old_val" property="statusOldVal" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="checks_loc" property="checksLoc" jdbcType="VARCHAR" />
+    <result column="checks_photo" property="checksPhoto" jdbcType="VARCHAR" />
+    <result column="checks_time" property="checksTime" jdbcType="VARCHAR" />
+    <result column="main_part" property="mainPart" jdbcType="VARCHAR" />
+    <result column="oil_tank" property="oilTank" jdbcType="VARCHAR" />
+    <result column="voice" property="voice" jdbcType="VARCHAR" />
+    <result column="sleeve" property="sleeve" jdbcType="VARCHAR" />
+    <result column="drainage_wire" property="drainageWire" jdbcType="VARCHAR" />
+    <result column="fan" property="fan" jdbcType="VARCHAR" />
+    <result column="silica_gel" property="silicaGel" jdbcType="VARCHAR" />
+    <result column="is_normal" property="isNormal" jdbcType="VARCHAR" />
+    <result column="status_new_val" property="statusNewVal" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="creation_date" property="creationDate" jdbcType="VARCHAR" />
+    <result column="last_updated_by" property="lastUpdatedBy" jdbcType="VARCHAR" />
+    <result column="last_updated_date" property="lastUpdatedDate" jdbcType="VARCHAR" />
+    <result column="maintain_id" property="maintainId" jdbcType="VARCHAR" />
+    <result column="maintenance_date" property="maintenanceDate" jdbcType="VARCHAR" />
+    <result column="distanceDays" property="distanceDays" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <insert id="insert" parameterType="sz.zp.cks.entity.ElectricalCheck" >
+			INSERT INTO ElectricalCheck (
+			checks_id ,
+			ep_id ,
+			status_old_val ,
+			user_id ,
+			checks_loc ,
+			checks_photo ,
+			checks_time ,
+			main_part ,
+			oil_tank ,
+			voice ,
+			sleeve ,
+			drainage_wire ,
+			fan ,
+			silica_gel ,
+			is_normal ,
+			status_new_val ,
+			created_by ,
+			creation_date ,
+			last_updated_by ,
+			last_updated_date ,
+			maintain_id,
+			maintenance_date ,
+			distanceDays
+			)
+			VALUES
+				(
+					#{checksId},
+					#{epId},
+					#{statusOldVal},
+					#{userId},
+					#{checksLoc},
+					#{checksPhoto},
+					#{checksTime},
+					#{mainPart},
+			
+					#{oilTank},
+					#{voice},
+					#{sleeve},
+					#{drainageWire},
+					#{fan},
+					#{silicaGel},
+					#{isNormal},
+					#{statusNewVal},
+					#{createdBy},
+					#{creationDate},
+					#{lastUpdatedBy},
+					#{lastUpdatedDate},
+					#{maintainId},
+					#{maintenanceDate},
+					#{distanceDays}					
+				)
+  </insert>
+
+  	<select id="queryById" resultType="sz.zp.cks.model.EquipmentT">
+	SELECT
+			t.epId AS "epId",
+			t.epName AS "epName",
+			(
+				SELECT
+					s.status_val
+				FROM
+					STATUS s
+				WHERE
+					s.ep_id = t.epId
+			) AS "statusVal",
+			(
+				SELECT
+					d.label
+				FROM
+					STATUS s,sys_dict d
+				WHERE
+					s.ep_id = t.epId 
+ AND d.type = 'status_type'
+ AND d.VALUE = s.status_val
+
+			) AS "statusName",
+			t.epModelNum AS "epModelNum",
+			t.epLocation AS "epLocation",
+			t.epType AS "epType",
+			(
+				SELECT
+					label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'epType'
+				AND d.
+				VALUE
+					= t.epType
+			) AS "epTypeName",
+t.maintenanceDate  AS "maintenanceDate",
+datediff(t.maintenanceDate,now()) AS "distanceDays",
+	(
+		CASE
+		WHEN (
+			SELECT
+				count(*)
+			FROM
+				equipmentRepair ir
+			WHERE
+				ir.ep_id = t.epId
+			AND ir.ep_ac_nextid != '5'
+		) > 0 THEN
+			'Y'
+		ELSE
+			'N'
+		END
+	) AS "repairIn"
+		FROM
+			equipment t
+		WHERE
+			t.epId =#{epId}
+	</select> 
+	
+	
+  <sql id="Base_Column_List" >
+	checks_id  as 'checksId',
+	ep_id as 'epId',
+	status_old_val as 'statusOldVal',
+	user_id as 'userId',
+	checks_loc as 'checksLoc',
+	checks_photo as 'checksPhoto',
+	checks_time as 'checksTime',
+	main_part as 'mainPart',
+	oil_tank as 'oilTank',
+	voice as 'voice',
+	sleeve as 'sleeve',
+	drainage_wire as 'drainageWire',
+	fan as 'fan',
+	silica_gel as 'silicaGel',
+	is_normal as 'isNormal',
+	status_new_val as 'statusNewVal',
+	created_by as 'createdBy',
+	creation_date as 'creationDate',
+	last_updated_by as 'lastUpdatedBy',
+	last_updated_date as 'lastUpdatedDate',
+	maintain_id as 'maintainId',
+	maintenance_date as 'maintenanceDate',
+	distanceDays as 'distanceDays',
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.user_id
+	) AS "userIdName", -- 巡检人名称
+	q.epType,
+	q.epName 
+  </sql>
+	<select id="findListByUserId" parameterType="String" resultType="sz.zp.cks.model.ElectricalCheckT">
+
+    select 
+    <include refid="Base_Column_List" />
+    FROM
+	electricalcheck r ,equipment q
+	WHERE r.ep_id = q.epId
+    and user_id = #{userId,jdbcType=VARCHAR}
+
+
+    </select>
+ 	
+ 	
+ 	
+ 	<select id="findAllList" parameterType="String" resultType="sz.zp.cks.model.ElectricalCheckT">
+
+    select 
+    <include refid="Base_Column_List" />
+    FROM
+	electricalcheck r ,equipment q
+	WHERE r.ep_id = q.epId
+    </select>	
+ 	
+ 	
+ 	
+  <sql id="electricalCheckTColumns" >
+		k.ep_id as "epId",-- 设备编号
+		q.epName as "epName",-- 设备名称
+		k.status_old_val as "statusOldVal",-- 设备状态
+		q.epModelNum as "epModelNum",-- 规格型号
+		q.epLocation as "epLocation",-- 安装地点
+		q.epType as "epType",-- 设备类型
+			(
+				SELECT
+					u.user_name
+				FROM
+					USER u
+				WHERE
+					u.user_id = k.user_id
+			) AS "userIdName", -- 巡检人名称 
+		k.checks_loc as "checksLoc",-- 巡检定位
+		k.checks_photo as "checksPhoto",-- 拍照签到
+		k.checks_time as "checksTime",-- 巡检时间
+		k.main_part as "mainPart",-- 主变主体
+		
+		k.oil_tank as "oilTank",-- 油箱油位
+		k.voice as "voice",-- 运行声音
+		k.status_new_val as "statusNewVal",-- 设备状态
+		k.maintenance_date as "maintenanceDate",-- 规定保养时间
+		k.distanceDays as "distanceDays",-- 距离规定的保养日期剩余天数
+		a.clear as "clear",-- 设备清洁、无油垢、灰尘
+		a.line as "line",-- 电气线路有无损坏
+		a.oil as "oil",-- 加机油
+		a.maintain_describe as "maintainDescribe",-- 保养情况描述
+		a.maintain_time as "maintainTime", -- 实际保养时间
+		k.checks_id as "checksId",
+		a.maintain_id as "maintainId"
+  </sql>   
+	  <!--待办任务点击查询 -->
+        <select id="qryById" parameterType="String" resultType="sz.zp.cks.model.ElectricalCheckT">
+		SELECT 
+			<include refid="electricalCheckTColumns"/>
+					
+		FROM
+			electricalCheck k
+		JOIN equipment q ON k.ep_id = q.epId
+		LEFT JOIN electricalMaintain a ON k.checks_id = a.checks_id			
+		where k.checks_id =#{checksId} 			
+       </select>    
+    
+    
+</mapper>

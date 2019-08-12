@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.HstatusMapper" >
+  <resultMap id="hstatusResultMap" type="sz.zp.cks.entity.Hstatus" >
+    <id column="hstatus_id" property="hstatusId" jdbcType="VARCHAR" />
+    <result column="status_id" property="statusId" jdbcType="VARCHAR" />
+    <result column="ep_id" property="epId" jdbcType="VARCHAR" />
+    <result column="status_val" property="statusVal" jdbcType="VARCHAR" />
+    <result column="re_type" property="reType" jdbcType="VARCHAR" />
+    <result column="re_typeId" property="reTypeid" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="creation_date" property="creationDate" jdbcType="VARCHAR" />
+    <result column="last_updated_by" property="lastUpdatedBy" jdbcType="VARCHAR" />
+    <result column="last_updated_date" property="lastUpdatedDate" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+
+	<select id="findStatusTList" resultType="sz.zp.cks.model.StatusT">
+    SELECT
+	m.status_id AS "statusId",
+	m.ep_id AS "epId",
+	q.epName AS "epName",
+	q.epModelNum AS "epModelNum",
+	q.epLocation AS "eplocation",
+	q.epType AS "epType",
+	(select label from sys_dict t where t.type='epType' and t.value=q.epType ) AS "epTypeName",
+	m.status_val AS "statusVal"
+	,(select label from sys_dict t where t.type='status_type' and t.value=m.status_val ) AS "statusValName",
+	m.created_by  AS "createdBy",
+	m.creation_date  AS "creationDate",
+	(SELECT R.login_name FROM USER R WHERE r.user_id= m.created_by) AS "createdByName"	,
+	m.last_updated_by  AS "lastUpdatedBy",
+	m.last_updated_date  AS "lastUpdatedDate",
+	(SELECT R.login_name FROM USER R WHERE r.user_id= m.last_updated_by) AS "lastUpdatedByName"
+FROM
+	hstatus m,
+	equipment q
+WHERE
+	m.ep_id = q.epId
+ORDER BY
+	q.epId
+	</select> 
+
+
+  	<insert id="insert" parameterType="sz.zp.cks.entity.Hstatus">
+    insert into hstatus (hstatus_id,status_id, ep_id, status_val, 
+      re_type, re_typeId, remarks, 
+      created_by, creation_date, last_updated_by, 
+      last_updated_date
+      )
+    values (#{hstatusId},#{statusId}, #{epId}, #{statusVal}, 
+      #{reType}, #{reTypeid}, #{remarks}, 
+      #{createdBy}, #{creationDate}, #{lastUpdatedBy}, 
+      #{lastUpdatedDate})
+	</insert>
+
+
+
+</mapper>

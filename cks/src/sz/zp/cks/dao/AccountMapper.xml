@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.AccountMapper" >
+
+
+  <resultMap id="accountResultMap" type="sz.zp.cks.entity.Account" >
+    <id column="acc_id" property="accId" jdbcType="INTEGER" />
+    <result column="acc_login" property="accLogin" jdbcType="VARCHAR" />
+    <result column="acc_name" property="accName" jdbcType="VARCHAR" />
+    <result column="acc_pass" property="accPass" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  	<sql id="findListRecordColumns">
+			sc.acc_login as "accLogin",acc_pass as "accPass"
+	</sql>
+  
+  
+  <!-- 用户登陆 -->
+  <select id="login" parameterType="Account" resultMap="accountResultMap">
+  	select * from account where acc_login =#{accLogin} and acc_pass =#{accPass} 
+  </select>
+  
+   <select id="countTest" parameterType="Account" resultType="sz.zp.cks.entity.AccountTest">
+  	select  acc_login accLogin, acc_pass accName,count(*) count from account where acc_login =#{accLogin} and acc_pass =#{accPass} 
+  </select>
+  
+ 
+ 
+	<select id="findList" resultType="sz.zp.cks.entity.Account">
+		SELECT 
+			<include refid="findListRecordColumns"/>
+		from account sc
+	</select> 
+ 
+  
+</mapper>

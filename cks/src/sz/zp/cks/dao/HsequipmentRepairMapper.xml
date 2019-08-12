@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.HsequipmentRepairMapper" >
+  <resultMap id="hsequipmentRepairResultMap" type="sz.zp.cks.entity.HsequipmentRepair" >
+    <id column="hs_equipmentRepair_id" property="hsEquipmentrepairId" jdbcType="VARCHAR" />
+    <result column="equipmentRepair_id" property="equipmentrepairId" jdbcType="VARCHAR" />
+    <result column="ep_id" property="epId" jdbcType="VARCHAR" />
+    <result column="ep_type" property="epType" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="epr_ck_time" property="eprCkTime" jdbcType="VARCHAR" />
+    <result column="epr_ck_video" property="eprCkVideo" jdbcType="VARCHAR" />
+    <result column="epr_ck_photo" property="eprCkPhoto" jdbcType="VARCHAR" />
+    <result column="epr_ck_describe" property="eprCkDescribe" jdbcType="VARCHAR" />
+    <result column="epr_ck_level" property="eprCkLevel" jdbcType="VARCHAR" />
+    <result column="ep_home_equtype" property="epHomeEqutype" jdbcType="VARCHAR" />
+    <result column="ep_home_equname" property="epHomeEquname" jdbcType="VARCHAR" />
+    <result column="ep_re_no" property="epReNo" jdbcType="VARCHAR" />
+    <result column="ep_re_id" property="epReId" jdbcType="VARCHAR" />
+    <result column="ep_re_kind" property="epReKind" jdbcType="VARCHAR" />
+    <result column="ep_re_group" property="epReGroup" jdbcType="VARCHAR" />
+    <result column="ep_re_describe" property="epReDescribe" jdbcType="VARCHAR" />
+    <result column="ep_re_time" property="epReTime" jdbcType="VARCHAR" />
+    <result column="ep_re_status" property="epReStatus" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="creation_date" property="creationDate" jdbcType="VARCHAR" />
+    <result column="last_updated_by" property="lastUpdatedBy" jdbcType="VARCHAR" />
+    <result column="last_updated_date" property="lastUpdatedDate" jdbcType="VARCHAR" />
+    <result column="ep_ac_status" property="epAcStatus" jdbcType="VARCHAR" />
+    <result column="ep_ac_nowid" property="epAcNowid" jdbcType="VARCHAR" />
+    <result column="ep_ac_nowuser" property="epAcNowuser" jdbcType="VARCHAR" />
+    <result column="ep_ac_nextid" property="epAcNextid" jdbcType="VARCHAR" />
+    <result column="ep_ac_nextuser" property="epAcNextuser" jdbcType="VARCHAR" />
+    <result column="maintenance_date" property="maintenanceDate" jdbcType="VARCHAR" />
+    <result column="distanceDays" property="distanceDays" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+
+  <insert id="insert" parameterType="sz.zp.cks.entity.HsequipmentRepair" >
+    insert into hsequipmentrepair (hs_equipmentRepair_id, equipmentRepair_id, 
+      ep_id, ep_type, user_id, 
+      epr_ck_time, epr_ck_video, epr_ck_photo, 
+      epr_ck_describe, epr_ck_level, ep_home_equtype, 
+      ep_home_equname, ep_re_no, ep_re_id, 
+      ep_re_kind, ep_re_group, ep_re_describe, 
+      ep_re_time, ep_re_status, created_by, 
+      creation_date, last_updated_by, last_updated_date, 
+      ep_ac_status, ep_ac_nowid, ep_ac_nowuser, 
+      ep_ac_nextid, ep_ac_nextuser, 
+      maintenance_date, distanceDays 
+      )
+    values (#{hsEquipmentrepairId,jdbcType=VARCHAR}, #{equipmentrepairId,jdbcType=VARCHAR}, 
+      #{epId,jdbcType=VARCHAR}, #{epType,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{eprCkTime,jdbcType=VARCHAR}, #{eprCkVideo,jdbcType=VARCHAR}, #{eprCkPhoto,jdbcType=VARCHAR}, 
+      #{eprCkDescribe,jdbcType=VARCHAR}, #{eprCkLevel,jdbcType=VARCHAR}, #{epHomeEqutype,jdbcType=VARCHAR}, 
+      #{epHomeEquname,jdbcType=VARCHAR}, #{epReNo,jdbcType=VARCHAR}, #{epReId,jdbcType=VARCHAR}, 
+      #{epReKind,jdbcType=VARCHAR}, #{epReGroup,jdbcType=VARCHAR}, #{epReDescribe,jdbcType=VARCHAR}, 
+      #{epReTime,jdbcType=VARCHAR}, #{epReStatus,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{creationDate,jdbcType=VARCHAR}, #{lastUpdatedBy,jdbcType=VARCHAR}, #{lastUpdatedDate,jdbcType=VARCHAR}, 
+      #{epAcStatus,jdbcType=VARCHAR}, #{epAcNowid,jdbcType=VARCHAR}, #{epAcNowuser,jdbcType=VARCHAR}, 
+      #{epAcNextid,jdbcType=VARCHAR}, #{epAcNextuser,jdbcType=VARCHAR},
+      #{maintenanceDate,jdbcType=VARCHAR}, #{distanceDays,jdbcType=VARCHAR}      
+      
+      )
+  </insert>
+  
+ 	<sql id="hsequipmentRepairTColumns">
+ 	
+ 	
+ 	r.hs_equipmentRepair_id AS "hsEquipmentrepairId", -- id
+	r.equipmentRepair_id AS "equipmentrepairId", -- id
+	r.ep_id AS "epId", -- 设备编号
+	r.ep_type AS "epType", -- 报修类别
+	r.user_id AS "userId", -- 报修人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.user_id
+	) AS "userIdName", -- 报修人名称
+	r.epr_ck_time AS "eprCkTime", -- 报修时间
+	r.epr_ck_photo AS "eprCkPhoto", -- 故障情况拍照
+	r.epr_ck_describe AS "eprCkDescribe", -- 故障情况描述
+	(
+		CASE r.ep_type
+		WHEN '1' THEN
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'epType'
+				AND d.
+				VALUE
+					= q.epType
+			)
+		ELSE
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'ep_home_equtype'
+				AND d.
+				VALUE
+					= r.ep_home_equtype
+			)
+		END
+	) AS "epHomeEqutype",
+	-- 设备类型
+	(
+		CASE r.ep_type
+		WHEN '1' THEN
+			(q.epName)
+		ELSE
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = r.ep_home_equtype
+				AND d.
+				VALUE
+					= r.ep_home_equname
+			)
+		END
+	) AS "epHomeEquname", -- 设备名称
+r.ep_re_id AS "epReId", -- 维修责任人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_re_id
+	) AS "epReIdName", -- 维修责任人名称
+r.ep_re_kind AS "epReKind", -- 故障类别
+r.ep_re_describe AS "epReDescribe", -- 维修情况说明
+r.ep_re_time AS "epReTime", -- 维修完成时间
+r.ep_re_status AS "epReStatus", -- 设备状态
+
+r.created_by AS "createdBy",-- 创建人
+r.creation_date AS "creationDate",-- 创建时间
+r.last_updated_by AS "lastUpdatedBy",-- 更新人
+r.last_updated_date AS "lastUpdatedDate",-- 更新时间
+
+r.ep_ac_status AS "epAcStatus", -- 流程状态
+
+
+r.ep_ac_nowid AS "epAcNowid", -- 当前节点
+r.ep_ac_nowuser AS "epAcNowuser", -- 当前负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nowuser
+	) AS "epAcNowuserName", -- 当前负责人名称
+
+r.ep_ac_nextid AS "epAcNextid", -- 下个节点
+r.ep_ac_nextuser AS "epAcNextuser", -- 下个节点负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nextuser
+	) AS "epAcNextuserName" ,-- 下个节点负责人名称
+q.epModelNum AS "epModelNum", -- 规格型号
+q.epLocation AS "epLocation", -- 安装地点	
+a.maintain_id AS "maintainId",
+a.maintain_describe AS "maintainDescribe",
+a.maintain_time AS "maintainTime",
+a.clear AS "clear",
+a.line AS "line",
+a.oil AS "oil",
+r.maintenance_date AS "maintenanceDate",
+r.distanceDays AS "distanceDays"
+
+	</sql> 
+  
+  
+<!--   查询当前登录所属用于已经提交的报修任务(巡检类型) -->
+  <select id="findList" resultType="sz.zp.cks.model.HsequipmentRepairT" parameterType="sz.zp.cks.entity.HsequipmentRepair" >
+		SELECT 
+			<include refid="hsequipmentRepairTColumns"/>
+		FROM HsequipmentRepair r join equipment q 
+		on r.ep_id = q.epId  
+		left JOIN electricalMaintain a
+ 	 on r.equipmentRepair_id=a.checks_id 
+	WHERE   r.ep_ac_nowuser=#{epAcNowuser} and r.ep_type=#{epType} ORDER BY r.creation_date  desc
+  </select>
+
+	  <!--待办任务点击查询 -->
+        <select id="qryById" parameterType="String" resultType="sz.zp.cks.model.HsequipmentRepairT">
+		SELECT 
+			<include refid="hsequipmentRepairTColumns"/>
+		FROM HsequipmentRepair r join equipment q 
+		on r.ep_id = q.epId  
+		left JOIN electricalMaintain a
+ 	 on r.equipmentRepair_id=a.checks_id 
+	where  r.hs_equipmentRepair_id =#{hsEquipmentrepairId}   
+       </select>
+       
+<!--zdy   查询当前登录所属用于已经提交的报修任务(业主模块) -->
+  <select id="findOList" resultType="sz.zp.cks.model.HsequipmentRepairO" parameterType="sz.zp.cks.entity.HsequipmentRepair" >
+		SELECT 
+			<include refid="hsequipmentRepairOColumns"/>
+	FROM HsequipmentRepair r
+	WHERE r.ep_ac_nowuser=#{epAcNowuser} and r.ep_type=#{epType}
+	ORDER BY STR_TO_DATE(r.last_updated_date, '%Y-%m-%d %H:%i:%s' )  desc
+  </select>
+
+	  <!--待办任务点击查询 -->
+        <select id="qryOById" parameterType="String" resultType="sz.zp.cks.model.HsequipmentRepairO">
+		SELECT 
+			<include refid="hsequipmentRepairOColumns"/>
+	FROM HsequipmentRepair r
+	WHERE  r.hs_equipmentRepair_id =#{hsEquipmentrepairId} 
+       
+       </select>       
+
+ 	<sql id="hsequipmentRepairOColumns">
+ 	
+ 	
+ 	r.hs_equipmentRepair_id AS "hsEquipmentrepairId", -- id
+	r.equipmentRepair_id AS "equipmentrepairId", -- id
+	r.ep_id AS "epId", -- 设备编号
+	r.ep_type AS "epType", -- 报修类别
+	r.user_id AS "userId", -- 报修人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.user_id
+	) AS "userIdName", -- 报修人名称
+	    (
+		SELECT
+			u.mobile
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.user_id
+
+	) AS "mobile", -- 报修人电话
+	r.epr_ck_time AS "eprCkTime", -- 报修时间
+	r.epr_ck_photo AS "eprCkPhoto", -- 故障情况拍照
+	r.epr_ck_describe AS "eprCkDescribe", -- 故障情况描述
+	(
+
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'ep_home_equtype'
+				AND d.
+				VALUE
+					= r.ep_home_equtype
+
+	) AS "epHomeEqutype",
+	-- 设备类型
+	(
+	
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = r.ep_home_equtype
+				AND d.
+				VALUE
+					= r.ep_home_equname
+	) AS "epHomeEquname", -- 设备名称
+  r.ep_re_id AS "epReId", -- 维修责任人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_re_id
+	) AS "epReIdName", -- 维修责任人名称
+	(
+
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'epr_ck_level'
+				AND d.
+				VALUE
+					= r.epr_ck_level
+
+	)
+	AS "eprCkLevel", -- 故障等级	
+r.ep_re_kind AS "epReKind", -- 故障类别
+r.ep_re_describe AS "epReDescribe", -- 维修情况说明
+r.ep_re_time AS "epReTime", -- 维修完成时间
+r.ep_re_status AS "epReStatus", -- 设备状态
+
+r.created_by AS "createdBy",-- 创建人
+r.creation_date AS "creationDate",-- 创建时间
+r.last_updated_by AS "lastUpdatedBy",-- 更新人
+r.last_updated_date AS "lastUpdatedDate",-- 更新时间
+
+r.ep_ac_status AS "epAcStatus", -- 流程状态
+
+
+r.ep_ac_nowid AS "epAcNowid", -- 当前节点
+r.ep_ac_nowuser AS "epAcNowuser", -- 当前负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nowuser
+	) AS "epAcNowuserName", -- 当前负责人名称
+
+r.ep_ac_nextid AS "epAcNextid", -- 下个节点
+r.ep_ac_nextuser AS "epAcNextuser", -- 下个节点负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nextuser
+	) AS "epAcNextuserName" ,-- 下个节点负责人名称
+   (
+		SELECT
+			o.own_location
+		FROM
+			OWNER o
+		WHERE
+			o.user_id = r.user_id
+	) AS "epLocation" -- 安装地点	
+	</sql>
+
+	<select id="qryHsAll" resultType="sz.zp.cks.entity.HsequipmentRepair">
+		select
+		      hs_equipmentRepair_id as equipmentrepairId,
+		      ep_id as epId,
+		      ep_type as epType,
+              user_id as userid,
+              epr_ck_time as eprCkTime,
+              epr_ck_video as eprCkVideo,
+              epr_ck_photo as eprCkPhoto,
+              epr_ck_describe as eprCkDescribe,
+              epr_ck_level as eprCkLevel,
+              ep_home_equtype as epHomeEqutype,
+              ep_home_equname as epHomeEquname,
+              ep_re_no as epReNo,
+              ep_re_id as epReId,
+              ep_re_kind as epReKind,
+              ep_re_group as epReGroup,
+              ep_re_describe as epReDescribe,
+              ep_re_time as epReTime,
+              ep_re_status as epReStatus,
+              created_by as createdBy,
+              creation_date as creationDate,
+              last_updated_by as lastUpdatedBy,
+              last_updated_date as lastUpdatedDate,
+              ep_ac_status as epAcStatus,
+              ep_ac_nowid as epAcNowid,
+              ep_ac_nowuser as epAcNowuser,
+              ep_ac_nextid as epAcNextid,
+              ep_ac_nextuser as epAcNextuser,
+              maintenance_date as maintenanceDate,
+              distanceDays as distanceDays
+
+		from hsequipmentrepair
+	</select>
+
+</mapper>

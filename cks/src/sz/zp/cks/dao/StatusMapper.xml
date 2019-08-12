@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.StatusMapper" >
+  <resultMap id="statusResultMap" type="sz.zp.cks.entity.Status" >
+    <id column="status_id" property="statusId" jdbcType="VARCHAR" />
+    <result column="ep_id" property="epId" jdbcType="VARCHAR" />
+    <result column="status_val" property="statusVal" jdbcType="VARCHAR" />
+    <result column="re_type" property="reType" jdbcType="VARCHAR" />
+    <result column="re_typeId" property="reTypeid" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="creation_date" property="creationDate" jdbcType="VARCHAR" />
+    <result column="last_updated_by" property="lastUpdatedBy" jdbcType="VARCHAR" />
+    <result column="last_updated_date" property="lastUpdatedDate" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+	<select id="findStatusTList" resultType="sz.zp.cks.model.StatusT">
+    SELECT
+	m.status_id AS "statusId",
+	m.ep_id AS "epId",
+	q.epName AS "epName",		
+	q.epModelNum AS "epModelNum",
+	q.epLocation AS "eplocation",
+	q.epType AS "epType",
+	(select label from sys_dict t where t.type='epType' and t.value=q.epType ) AS "epTypeName",
+	m.status_val AS "statusVal"
+	,(select label from sys_dict t where t.type='status_type' and t.value=m.status_val ) AS "statusValName",
+	m.created_by  AS "createdBy",
+	m.creation_date  AS "creationDate",
+	(SELECT R.login_name FROM USER R WHERE r.user_id= m.created_by) AS "createdByName"	,
+	m.last_updated_by  AS "lastUpdatedBy",
+	m.last_updated_date  AS "lastUpdatedDate",
+	(SELECT R.login_name FROM USER R WHERE r.user_id= m.last_updated_by) AS "lastUpdatedByName"	
+	
+	
+	
+	
+	
+FROM
+	STATUS m,
+	equipment q
+WHERE
+	m.ep_id = q.epId
+ORDER BY
+	q.epId
+	</select> 
+	
+ 	<select id="selectById" resultType="sz.zp.cks.model.StatusT">
+    SELECT
+	m.status_id AS "statusId",
+	m.ep_id AS "epId",
+	q.epName AS "epName",
+	q.epModelNum AS "epModelNum",
+	q.epLocation AS "eplocation",
+	q.epType AS "epType",
+	(select label from sys_dict t where t.type='epType' and t.value=q.epType ) AS "epTypeName",
+	m.status_val AS "statusVal"
+FROM
+	STATUS m,
+	equipment q
+WHERE
+	m.ep_id = q.epId 
+	and m.status_id=#{statusId}
+ 
+	</select> 
+ 
+ 
+ 
+ 
+  	<select id="queryById" resultType="sz.zp.cks.entity.Status">
+    SELECT 
+ status_id as "statusId",
+ep_id as "epId",
+status_val as "statusVal",
+re_type as "reType",
+re_typeId as "reTypeid",
+remarks as "remarks",
+created_by as "createdBy",
+creation_date as "creationDate",
+last_updated_by as "lastUpdatedBy",
+last_updated_date as "lastUpdatedDate"
+    FROM STATUS m  WHERE  m.status_id=#{statusId}
+ 
+	</select> 
+ 
+ 
+ 	<update id="update">
+		UPDATE STATUS
+		SET status_id = #{statusId} ,
+		ep_id = #{epId} ,
+		status_val = #{statusVal} ,
+		re_type = #{reType} ,
+		re_typeId = #{reTypeid} ,
+		remarks = #{remarks} ,
+		created_by = #{createdBy} ,
+		creation_date = #{creationDate} ,
+		last_updated_by = #{lastUpdatedBy} ,
+		last_updated_date = #{lastUpdatedDate} 
+		WHERE
+			status_id = #{statusId}
+	</update>
+ 
+  	<insert id="insert" parameterType="sz.zp.cks.entity.Status">
+    insert into status (status_id, ep_id, status_val, 
+      re_type, re_typeId, remarks, 
+      created_by, creation_date, last_updated_by, 
+      last_updated_date
+      )
+    values (#{statusId}, #{epId}, #{statusVal}, 
+      #{reType}, #{reTypeid}, #{remarks}, 
+      #{createdBy}, #{creationDate}, #{lastUpdatedBy}, 
+      #{lastUpdatedDate})
+	</insert>
+ 
+ 
+	
+ 	<delete id="delete"  parameterType="sz.zp.cks.entity.Status">
+	  delete from status  where status_id=#{statusId}
+	</delete>
+ 
+  	<select id="getEquipList" resultType="sz.zp.cks.entity.Equipment">
+SELECT
+	*
+FROM
+	equipment t
+
+ORDER BY
+	t.epId
+ 
+	</select> 
+ 
+  	<select id="getStatusByEqId" resultMap="statusResultMap">
+	select * from status s  where s.ep_id=#{epId}
+	</select>
+
+ 
+</mapper>

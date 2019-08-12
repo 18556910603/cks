@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.AlarmMapper">
+	<resultMap type="sz.zp.cks.entity.Alarm" id="AlarmResultMap">
+		<id column="alarm_id" property="alarmId" jdbcType="VARCHAR" />
+		<result column="source" property="source" jdbcType="VARCHAR" />
+		<result column="timestamp" property="timestamp" jdbcType="VARCHAR" />
+		<result column="sourceState" property="sourceState" jdbcType="VARCHAR" />
+		<result column="ackState" property="ackState" jdbcType="VARCHAR" />
+		<result column="priority" property="priority" jdbcType="VARCHAR" />
+		<result column="alarmClass" property="alarmClass" jdbcType="VARCHAR" />
+		<result column="alarmText" property="alarmText" jdbcType="VARCHAR" />
+		<result column="lowLimit" property="lowLimit" jdbcType="VARCHAR" />
+		<result column="highLimit" property="highLimit" jdbcType="VARCHAR" />
+		<result column="value" property="value" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="creationDate" property="creationDate" jdbcType="VARCHAR" />
+		<result column="natureMessage" property="natureMessage" jdbcType="VARCHAR" />
+		<result column="normalTime" property="normalTime" jdbcType="VARCHAR" />
+		
+	</resultMap>
+	<insert id="insert" parameterType="sz.zp.cks.entity.Alarm">
+		REPLACE INTO Alarm(
+		alarm_id,
+		source,
+		timestamp,
+		sourceState,
+		ackState,
+		priority,
+		alarmClass,
+		alarmText,
+		lowLimit,
+		highLimit,
+		value,
+		type,
+		creationDate,
+		natureMessage,
+		normalTime
+		)
+		values
+		(
+		#{alarmId},
+		#{source},
+		#{timestamp},
+		#{sourceState},
+		#{ackState},
+		#{priority},
+		#{alarmClass},
+		#{alarmText},
+		#{lowLimit},
+		#{highLimit},
+		#{value},
+		#{type},
+		#{creationDate},
+		#{natureMessage},
+		#{normalTime}
+		)
+	</insert>
+	
+	 <!--   zdy --> 
+    <select id="getAllAlarms" resultType="sz.zp.cks.entity.Alarm">
+	SELECT a.alarm_id as "alarmId",source as "source", timestamp as "timestamp",
+           sourceState as "sourceState",ackState as "ackState",priority as "priority",alarmClass as "alarmClass",
+           alarmText as "alarmText", lowLimit as "lowLimit", highLimit as "highLimit",value as "value",type as "type",normalTime as "normalTime",creationDate as "creationDate"
+	FROM alarm a
+    ORDER BY STR_TO_DATE(a.timestamp, '%Y-%m-%d %H:%i:%s' ) desc   
+    </select>
+   
+    <select id="getNewAlarm" resultType="sz.zp.cks.entity.Alarm">
+	SELECT a.alarm_id as "alarmId",source as "source", timestamp as "timestamp",
+           sourceState as "sourceState",ackState as "ackState",priority as "priority",alarmClass as "alarmClass",
+           alarmText as "alarmText", lowLimit as "lowLimit", highLimit as "highLimit",value as "value",type as "type",creationDate as "creationDate"
+	FROM alarm a
+    ORDER BY STR_TO_DATE(a.timestamp, '%Y-%m-%d %H:%i:%s' ) desc LIMIT 0,1  
+    </select>
+    
+    <!-- wl 查询相同告警是否已经存在-->
+	<select id="determineAlarmId" parameterType="String" resultType="int">
+	SELECT count(*)
+	FROM alarm
+	WHERE alarm_id=#{alarmId}
+	</select>
+
+	<select id="determineAlarmIdAndNormalTime" parameterType="sz.zp.cks.entity.Alarm" resultType="int">
+		SELECT COUNT(1)
+		FROM alarm
+		WHERE alarm_id=#{alarmId} AND normaltime=#{normalTime}
+	</select>
+
+	<select id="getAlarmCounts" resultType="sz.zp.cks.model.NewsCounts">
+		select
+		(select count(a.alarm_id)from Alarm a where a.sourceState='Offnormal')as
+		'abnormal',
+		(select count(a.alarm_id)from Alarm a where a.sourceState='Normal')as
+		'normal',
+		(select count(a.alarm_id)from Alarm a )as 'alarm',
+		(select count(*) from equipmentRepair i where i.ep_ac_nextid='2')as 'waitFor',-- 等待
+		(select count(*) from equipmentRepair i where i.ep_ac_nextid in ('3','4'))as 'handle',-- 处理
+		(select count(*) from equipmentRepair i where i.ep_ac_nextid in ('5'))as 'complete'-- 完成	
+
+	</select>	
+	
+	
+	
+	
+</mapper>

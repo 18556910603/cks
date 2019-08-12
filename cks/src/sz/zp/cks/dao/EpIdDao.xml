@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sz.zp.cks.dao.EpIdDao">
+    
+	<select id="count" parameterType="String" resultType="int">
+		SELECT 
+		count(*)
+		FROM equipment 
+		WHERE epType = #{epType}
+	</select>
+	<select id="getNum" resultType="int">
+		SELECT 
+		max(epUserID)
+		FROM epuser 
+	</select>
+	
+	
+</mapper>

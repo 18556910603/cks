@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.UserMapper" >
+  <resultMap id="userResultMap" type="sz.zp.cks.entity.User" >
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="employee_base_id" property="employeeBaseId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="creation_date" property="creationDate" jdbcType="VARCHAR" />
+    <result column="last_update_by" property="lastUpdateBy" jdbcType="VARCHAR" />
+    <result column="last_update_date" property="lastUpdateDate" jdbcType="VARCHAR" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+    <result column="wx_open_id" property="wxOpenId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   
+  	<sql id="findListRecordColumns">
+			sc.login_name as "loginName",password as "password"
+	</sql>
+  
+  
+  <!-- 用户登陆 -->
+  <select id="login" parameterType="user" resultMap="userResultMap">
+select 
+u.user_id as 'userId',
+u.user_name as 'userName',
+u.login_name as 'loginName',
+u.password as 'password',
+u.email as 'email',
+u.mobile as 'mobile',
+u.type as 'type',
+u.employee_base_id as 'employeeBaseId',
+u.status as 'status',
+u.created_by as 'createdBy',
+u.creation_date as 'creationDate',
+u.last_update_by as 'lastUpdateBy',
+u.last_update_date as 'lastUpdateDate',
+u.wx_open_id as 'wxOpenId',
+(select label from sys_dict where type='identityType' and value=u.identity) as 'identity'
+ from user   u
+  	 where 
+  	 (u.user_name =#{loginName} and u.password =#{password})
+  	 or
+  	 (u.login_name =#{loginName} and u.password =#{password}) 
+  </select>
+  
+   <select id="countTest" parameterType="user" resultType="sz.zp.cks.entity.AccountTest">
+  	select  login_name loginName, password accName,count(*) count from user where login_name =#{loginName} and password =#{password} 
+  </select>
+  
+
+	<select id="findList" resultType="sz.zp.cks.entity.User">
+		SELECT 
+			<include refid="findListRecordColumns"/>
+		from user sc
+	</select> 
+	
+    <!-- zdy -->
+   <select id="load" parameterType="String" resultType="User">
+  	select sc.user_id as "userId",user_name as "userName",login_name as "loginName",password as "password",email as "email"  	
+  	,mobile as "mobile",type as "type",employee_base_id as "employeeBaseId",status as "status",created_by as "createdBy"
+  	,creation_date as "creationDate",last_update_by as "lastUpdateBy",last_update_date as "lastUpdateDate",wx_open_id as "wxOpenId"
+  	 from user sc where user_id =#{userId}
+   </select>
+  
+   <!-- zdy -->
+   <update id="update" parameterType="User">
+   update user set user_name=#{userName},login_name=#{loginName},password=#{password},email=#{email},mobile=#{mobile},
+   type=#{type},employee_base_id=#{employeeBaseId},status=#{status},created_by=#{createdBy},creation_date=#{createdBy},
+   last_update_by=#{lastUpdateBy},last_update_date=#{lastUpdateDate},wx_open_id =#{wxOpenId}
+   where user_id =#{userId}
+   </update>
+ 
+   <!-- zdy -->
+   <insert id="registOwner" parameterType="User">
+   insert into user values(#{userId},#{userName},#{loginName},#{password},#{email},#{mobile},#{type},#{employeeBaseId},#{status},#{createdBy},#{creationDate},#{lastUpdateBy},#{lastUpdateDate},#{wxOpenId})
+   </insert>  
+   
+   <!-- deptType -->
+   <select id="selectForLeaderByType" resultMap="userResultMap" >
+		SELECT
+			*
+		FROM
+			USER u,
+			employeeBase b
+		WHERE
+			u.employee_base_id = b.employee_base_id
+		AND b.employee_base_id = (
+			SELECT
+				d.leader_id
+			FROM
+				department d
+			WHERE
+				d.dept_type = 'repair'
+		)
+   </select>  
+    <!-- deptType -->
+   <select id="selectOwnerForLeaderByType" resultMap="userResultMap" >
+		SELECT
+			*
+		FROM
+			USER u,
+			employeeBase b
+		WHERE
+			u.employee_base_id = b.employee_base_id
+		AND b.employee_base_id = (
+			SELECT
+				d.leader_id
+			FROM
+				department d
+			WHERE
+				d.dept_type = 'ownerRepair'
+		)
+   </select> 
+	
+	<sql id="userRecordColumns">
+	sc.user_id AS "userId",
+	user_name AS "userName",
+	login_name AS "loginName",
+	PASSWORD AS "password",
+	email AS "email",
+	mobile AS "mobile",
+	type AS "type",
+	employee_base_id AS "employeeBaseId",
+	STATUS AS "status",
+	created_by AS "createdBy",
+	creation_date AS "creationDate",
+	last_update_by AS "lastUpdateBy",
+	last_update_date AS "lastUpdateDate",
+	wx_open_id AS  "wxOpenId"
+	</sql>
+  
+	
+<!--    根据部门类型查找该部门人员 -->
+   	<select id="findListByDeptType" resultType="sz.zp.cks.entity.User">
+		SELECT 
+			<include refid="userRecordColumns"/>
+		FROM
+			USER sc
+		WHERE
+			sc.employee_base_id IN (
+				SELECT
+					b.employee_base_id
+				FROM
+					employeeBase b,
+					department t
+				WHERE
+					b.employee_dept_id = t.dept_id
+				AND t.dept_type = #{deptType}
+			)
+	</select> 
+	<select id="selectUserByEpId" parameterType="String" resultType="sz.zp.cks.entity.User">
+		select
+			user_id AS "userId",
+			user_name AS "userName",
+			login_name AS "loginName",
+			PASSWORD AS "password",
+			email AS "email",
+			mobile AS "mobile",
+			type AS "type",
+			employee_base_id AS "employeeBaseId",
+			STATUS AS "status",
+			created_by AS "createdBy",
+			creation_date AS "creationDate",
+			last_update_by AS "lastUpdateBy",
+			last_update_date AS "lastUpdateDate",
+			wx_open_id AS  "wxOpenId"
+		from 
+			user 
+		where 
+			user.user_id in (select 
+								userid from epuser 
+							 where 
+			                     epUserId in (select
+			                     				 epUserId 
+			                     			  from 
+			                     			  	 equipment 
+			                     			  where epId=#{epId}))
+	
+	</select>
+   
+   
+   
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sz.zp.cks.dao.EpuserMapper">
+  <resultMap id="BaseResultMap" type="sz.zp.cks.entity.Epuser">
+    <id column="epUserId" jdbcType="VARCHAR" property="epUserId" />
+    <result column="userId" jdbcType="VARCHAR" property="userId" />
+    <result column="epUserType" jdbcType="VARCHAR" property="epUserType" />
+    <result column="epUserLoc" jdbcType="VARCHAR" property="epUserLoc" />
+    <result column="createdBy" jdbcType="VARCHAR" property="createdby" />
+    <result column="creationDate" jdbcType="VARCHAR" property="creationdate" />
+    <result column="lastUpdatedBy" jdbcType="VARCHAR" property="lastupdatedby" />
+    <result column="lastUpdatedDate" jdbcType="VARCHAR" property="lastupdateddate" />
+  </resultMap>
+   
+   <select id="load" parameterType="String" resultMap="epUserResultMap">
+    select * from epuser  e inner join user u on e.userId=u.user_id  where epUserId =#{epUserId}
+  </select>
+  <resultMap id="epUserResultMap" type="Epuser">
+  <id column="epUserId" property="epUserId" />
+   <result column="userId" property="userId" />
+  <result column="epUserType" property="epUserType" />
+  <result column="epUserLoc" property="epUserLoc" />
+  <collection ofType="User" property="user">  
+    <id column="user_id" property="userId" />
+ 	<result column="user_name" property="userName" />
+ 	<result column="mobile" property="mobile" />
+  </collection>
+  </resultMap>
+  
+  <select id="getUserID" parameterType="String"  resultType="String">
+    select  user_id  from user where mobile =#{mobile}
+  </select>
+  
+  <select id="getEpUserId" parameterType="String"  resultType="String">
+    select  epUserId  from epuser  where userId =#{userId}
+  </select>
+  
+  <insert id="create" parameterType="Epuser">
+    insert into epuser values(#{epUserId},#{userId},#{epUserType},#{epUserLoc},#{createdby},#{creationdate},#{lastupdatedby},#{lastupdateddate})
+  </insert>
+  
+   <delete id="delete" parameterType="String" flushCache="true">
+   delete from epuser where epUserId =#{epUserId}
+  </delete>
+    
+   <update id="update" parameterType="Epuser">
+   update epuser set epUserId=#{epUserId},userId=#{userId},epUserType=#{epUserType},epUserLoc=#{epUserLoc}
+   where epUserId =#{epUserId}
+  </update>
+  
+  <select id="list" resultType="Epuser" resultMap="epUserResultsMap">
+    select * from epuser e inner join user u on e.userId=u.user_id 
+  </select>
+  <resultMap id="epUserResultsMap" type="Epuser">
+  <id column="epUserId" property="epUserId" />
+  <result column="userId" property="userId" />
+  <result column="epUserType" property="epUserType" />
+  <result column="epUserLoc" property="epUserLoc" />
+  <collection ofType="User" property="user">  
+    <id column="user_id" property="userId" />
+ 	<result column="user_name" property="userName" />
+ 	<result column="mobile" property="mobile" />
+  </collection>
+  
+  </resultMap>
+  
+  <select id="getUserIdByLocAndType" resultType="String">
+  	select userid from epuser where epuserloc=#{0} and epusertype=#{1}
+  	
+  </select>
+  <select id="getUserIdByEpId" resultType="String">
+    select epuser.userId from epuser where epuser.epUserId=(select equipment.epuserId from equipment where equipment.epId=#{0})
+
+  </select>
+    
+</mapper>

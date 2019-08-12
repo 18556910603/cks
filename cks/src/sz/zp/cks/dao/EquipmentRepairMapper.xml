@@ -1,0 +1,1221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.EquipmentRepairMapper">
+	<resultMap id="equipmentRepairResultMap" type="sz.zp.cks.entity.EquipmentRepair">
+		<id column="equipmentRepair_id" property="equipmentrepairId"
+			jdbcType="VARCHAR" />
+		<result column="ep_id" property="epId" jdbcType="VARCHAR" />
+		<result column="ep_type" property="epType" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="epr_ck_time" property="eprCkTime" jdbcType="VARCHAR" />
+		<result column="epr_ck_video" property="eprCkVideo" jdbcType="VARCHAR" />
+		<result column="epr_ck_photo" property="eprCkPhoto" jdbcType="VARCHAR" />
+		<result column="epr_ck_describe" property="eprCkDescribe"
+			jdbcType="VARCHAR" />
+		<result column="epr_ck_level" property="eprCkLevel" jdbcType="VARCHAR" />
+		<result column="ep_home_equtype" property="epHomeEqutype"
+			jdbcType="VARCHAR" />
+		<result column="ep_home_equname" property="epHomeEquname"
+			jdbcType="VARCHAR" />
+		<result column="ep_re_no" property="epReNo" jdbcType="VARCHAR" />
+		<result column="ep_re_id" property="epReId" jdbcType="VARCHAR" />
+		<result column="ep_re_kind" property="epReKind" jdbcType="VARCHAR" />
+		<result column="ep_re_group" property="epReGroup" jdbcType="VARCHAR" />
+		<result column="ep_re_describe" property="epReDescribe"
+			jdbcType="VARCHAR" />
+		<result column="ep_re_time" property="epReTime" jdbcType="VARCHAR" />
+		<result column="ep_re_status" property="epReStatus" jdbcType="VARCHAR" />
+		<result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+		<result column="creation_date" property="creationDate"
+			jdbcType="VARCHAR" />
+		<result column="last_updated_by" property="lastUpdatedBy"
+			jdbcType="VARCHAR" />
+		<result column="last_updated_date" property="lastUpdatedDate"
+			jdbcType="VARCHAR" />
+		<result column="ep_ac_status" property="epAcStatus" jdbcType="VARCHAR" />
+		<result column="ep_ac_nowid" property="epAcNowid" jdbcType="VARCHAR" />
+		<result column="ep_ac_nowuser" property="epAcNowuser" jdbcType="VARCHAR" />
+		<result column="ep_ac_nextid" property="epAcNextid" jdbcType="VARCHAR" />
+		<result column="ep_ac_nextuser" property="epAcNextuser"
+			jdbcType="VARCHAR" />
+   		 <result column="maintenance_date" property="maintenanceDate" jdbcType="VARCHAR" />
+    	<result column="distanceDays" property="distanceDays" jdbcType="VARCHAR" />			
+	</resultMap>
+
+
+
+	<insert id="insert" parameterType="sz.zp.cks.entity.EquipmentRepair">
+		INSERT INTO EquipmentRepair (
+		equipmentRepair_id,
+		ep_id,
+		ep_type,
+		user_id,
+		epr_ck_time,
+		epr_ck_video,
+		epr_ck_photo,
+		epr_ck_describe,
+		epr_ck_level,
+		ep_home_equtype,
+		ep_home_equname,
+		ep_re_no,
+		ep_re_id,
+		ep_re_kind,
+		ep_re_group,
+		ep_re_describe,
+		ep_re_time,
+		ep_re_status,
+		created_by,
+		creation_date,
+		last_updated_by,
+		last_updated_date,
+		ep_ac_status,
+		ep_ac_nowid,
+		ep_ac_nowuser,
+		ep_ac_nextid,
+		ep_ac_nextuser,
+		maintenance_date,
+		distanceDays
+		)
+		VALUES
+		(
+		#{equipmentrepairId},
+		#{epId},
+		#{epType},
+		#{userId},
+		#{eprCkTime},
+		#{eprCkVideo},
+		#{eprCkPhoto},
+		#{eprCkDescribe},
+		#{eprCkLevel},
+		#{epHomeEqutype},
+		#{epHomeEquname},
+		#{epReNo},
+		#{epReId},
+		#{epReKind},
+		#{epReGroup},
+		#{epReDescribe},
+		#{epReTime},
+		#{epReStatus},
+		#{createdBy},
+		#{creationDate},
+		#{lastUpdatedBy},
+		#{lastUpdatedDate},
+		#{epAcStatus},
+		#{epAcNowid},
+		#{epAcNowuser},
+		#{epAcNextid},
+		#{epAcNextuser},
+		#{maintenanceDate},
+		#{distanceDays}
+		)
+	</insert>
+
+       <!-- zdy -->
+       <select id="queryByUserId" parameterType="String" resultType="EquipmentRepair">
+       select e.equipmentRepair_id as "equipmentrepairId",ep_id as "epId",ep_type as "epType",
+       user_id as "userId",epr_ck_time as "eprCkTime",epr_ck_video as "eprCkVideo",epr_ck_photo as "eprCkPhoto",
+       epr_ck_describe as "eprCkDescribe", epr_ck_level as "eprCkLevel", ep_home_equtype as "epHomeEqutype",
+       ep_home_equname as "epHomeEquname", ep_re_no as "epReNo", ep_re_id as "epReId",ep_re_kind as "epReKind",
+       ep_re_group as "epReGroup",ep_re_describe as "epReDescribe",ep_re_time as "epReTime",ep_re_status as "epReStatus",
+       created_by as "createdBy",creation_date as "creationDate",last_updated_by as "lastUpdatedBy",last_updated_date as "lastUpdatedDate",
+       ep_ac_status as "epAcStatus",ep_ac_nowid as "epAcNowid",ep_ac_nowuser as "epAcNowuser",ep_ac_nextid as "epAcNextid"
+       ,ep_ac_nextuser as "epAcNextuser"
+       from equipmentRepair e where e.user_id =#{userId} 
+       ORDER BY STR_TO_DATE(e.epr_ck_time, '%Y-%m-%d %H:%i:%s' )  desc
+       </select>
+       
+       <!-- zdy -->
+       <select id="queryByStatus" parameterType="Map"  resultType="EquipmentRepair">
+       select e.equipmentRepair_id as "equipmentrepairId",ep_id as "epId",ep_type as "epType",
+       user_id as "userId",epr_ck_time as "eprCkTime",epr_ck_video as "eprCkVideo",epr_ck_photo as "eprCkPhoto",
+       epr_ck_describe as "eprCkDescribe", epr_ck_level as "eprCkLevel", ep_home_equtype as "epHomeEqutype",
+       ep_home_equname as "epHomeEquname", ep_re_no as "epReNo", ep_re_id as "epReId",ep_re_kind as "epReKind",
+       ep_re_group as "epReGroup",ep_re_describe as "epReDescribe",ep_re_time as "epReTime",ep_re_status as "epReStatus",
+       created_by as "createdBy",creation_date as "creationDate",last_updated_by as "lastUpdatedBy",last_updated_date as "lastUpdatedDate",
+       ep_ac_status as "epAcStatus",ep_ac_nowid as "epAcNowid",ep_ac_nowuser as "epAcNowuser",ep_ac_nextid as "epAcNextid"
+       ,ep_ac_nextuser as "epAcNextuser"
+       from equipmentRepair e 
+       <where>
+       <if test="userId!=null and userId!=''">
+       and e.user_id =#{userId}
+       </if>
+       <if test="epAcStatus!=null and epAcStatus!=''">
+       and e.ep_ac_status =#{epAcStatus}
+       </if> 
+       </where>        
+       order by STR_TO_DATE(e.epr_ck_time, '%Y-%m-%d %H:%i:%s' )  desc
+       </select> 
+       
+       <!-- zdy -->
+       <select id="queryById" parameterType="String" resultType="EquipmentRepair">
+       select e.equipmentRepair_id as "equipmentrepairId",ep_id as "epId",ep_type as "epType",
+       user_id as "userId",epr_ck_time as "eprCkTime",epr_ck_video as "eprCkVideo",epr_ck_photo as "eprCkPhoto",
+       epr_ck_describe as "eprCkDescribe", epr_ck_level as "eprCkLevel", ep_home_equtype as "epHomeEqutype",
+       ep_home_equname as "epHomeEquname", ep_re_no as "epReNo", ep_re_id as "epReId",ep_re_kind as "epReKind",
+       ep_re_group as "epReGroup",ep_re_describe as "epReDescribe",ep_re_time as "epReTime",ep_re_status as "epReStatus",
+       created_by as "createdBy",creation_date as "creationDate",last_updated_by as "lastUpdatedBy",last_updated_date as "lastUpdatedDate",
+       ep_ac_status as "epAcStatus",ep_ac_nowid as "epAcNowid",ep_ac_nowuser as "epAcNowuser",ep_ac_nextid as "epAcNextid"
+       ,ep_ac_nextuser as "epAcNextuser"
+       from equipmentRepair e where e.equipmentRepair_id =#{equipmentrepairId} 
+       </select>
+       
+	  <!--待办任务点击查询 -->
+        <select id="qryById" parameterType="String" resultType="sz.zp.cks.model.EquipmentRepairT">
+		SELECT 
+			<include refid="equipmentRepairTColumns"/>
+	FROM equipmentRepair r, equipment q
+	WHERE r.ep_id = q.epId and r.equipmentRepair_id =#{equipmentrepairId} 
+       
+       </select>
+       
+       
+  	<sql id="equipmentRepairTColumns">
+
+	r.equipmentRepair_id AS "equipmentrepairId", -- id
+	r.ep_id AS "epId", -- 设备编号
+	r.ep_type AS "epType", -- 报修类别
+	r.user_id AS "userId", -- 报修人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.user_id
+	) AS "userIdName", -- 报修人名称
+	r.epr_ck_time AS "eprCkTime", -- 报修时间
+	r.epr_ck_photo AS "eprCkPhoto", -- 故障情况拍照
+	r.epr_ck_describe AS "eprCkDescribe", -- 故障情况描述
+	(
+		CASE r.ep_type
+		WHEN '1' THEN
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'epType'
+				AND d.
+				VALUE
+					= q.epType
+			)
+		ELSE
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'ep_home_equtype'
+				AND d.
+				VALUE
+					= r.ep_home_equtype
+			)
+		END
+	) AS "epHomeEqutype",
+	-- 设备类型
+	(
+		CASE r.ep_type
+		WHEN '1' THEN
+			(q.epName)
+		ELSE
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = r.ep_home_equtype
+				AND d.
+				VALUE
+					= r.ep_home_equname
+			)
+		END
+	) AS "epHomeEquname", -- 设备名称
+r.ep_re_id AS "epReId", -- 维修责任人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_re_id
+	) AS "epReIdName", -- 维修责任人名称
+r.ep_re_kind AS "epReKind", -- 故障类别
+r.ep_re_describe AS "epReDescribe", -- 维修情况说明
+r.ep_re_time AS "epReTime", -- 维修完成时间
+r.ep_re_status AS "epReStatus", -- 设备状态
+
+r.created_by AS "createdBy",-- 创建人
+r.creation_date AS "creationDate",-- 创建时间
+r.last_updated_by AS "lastUpdatedBy",-- 更新人
+r.last_updated_date AS "lastUpdatedDate",-- 更新时间
+
+r.ep_ac_status AS "epAcStatus", -- 流程状态
+
+
+r.ep_ac_nowid AS "epAcNowid", -- 当前节点
+r.ep_ac_nowuser AS "epAcNowuser", -- 当前负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nowuser
+	) AS "epAcNowuserName", -- 当前负责人名称
+
+r.ep_ac_nextid AS "epAcNextid", -- 下个节点
+r.ep_ac_nextuser AS "epAcNextuser", -- 下个节点负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nextuser
+	) AS "epAcNextuserName" ,-- 下个节点负责人名称
+q.epModelNum AS "epModelNum", -- 规格型号
+q.epLocation AS "epLocation",-- 安装地点	
+q.maintenanceDate  AS "maintenanceDate",
+datediff(q.maintenanceDate,now()) AS "distanceDays"
+	</sql> 
+  
+     
+  	<sql id="equipmentRepairTColumns2">
+
+	r.equipmentRepair_id AS "equipmentrepairId", -- id
+	r.ep_id AS "epId", -- 设备编号
+	r.ep_type AS "epType", -- 报修类别
+	r.user_id AS "userId", -- 报修人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.user_id
+	) AS "userIdName", -- 报修人名称
+	r.epr_ck_time AS "eprCkTime", -- 报修时间
+	r.epr_ck_photo AS "eprCkPhoto", -- 故障情况拍照
+	(
+		CASE r.ep_type
+		WHEN '1' THEN
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'epType'
+				AND d.
+				VALUE
+					= q.epType
+			)
+		ELSE
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'ep_home_equtype'
+				AND d.
+				VALUE
+					= r.ep_home_equtype
+			)
+		END
+	) AS "epHomeEqutype",
+	-- 设备类型
+	(
+		CASE r.ep_type
+		WHEN '1' THEN
+			(q.epName)
+		ELSE
+			(
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = r.ep_home_equtype
+				AND d.
+				VALUE
+					= r.ep_home_equname
+			)
+		END
+	) AS "epHomeEquname", -- 设备名称
+r.ep_re_id AS "epReId", -- 维修责任人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_re_id
+	) AS "epReIdName", -- 维修责任人名称
+r.ep_re_kind AS "epReKind", -- 故障类别
+r.ep_re_time AS "epReTime", -- 维修完成时间
+r.ep_re_status AS "epReStatus", -- 设备状态
+
+r.created_by AS "createdBy",-- 创建人
+r.creation_date AS "creationDate",-- 创建时间
+r.last_updated_by AS "lastUpdatedBy",-- 更新人
+r.last_updated_date AS "lastUpdatedDate",-- 更新时间
+
+r.ep_ac_status AS "epAcStatus", -- 流程状态
+
+
+r.ep_ac_nowid AS "epAcNowid", -- 当前节点
+r.ep_ac_nowuser AS "epAcNowuser", -- 当前负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nowuser
+	) AS "epAcNowuserName", -- 当前负责人名称
+
+r.ep_ac_nextid AS "epAcNextid", -- 下个节点
+r.ep_ac_nextuser AS "epAcNextuser", -- 下个节点负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nextuser
+	) AS "epAcNextuserName" ,-- 下个节点负责人名称
+q.epModelNum AS "epModelNum", -- 规格型号
+q.epLocation AS "epLocation",-- 安装地点	
+q.maintenanceDate  AS "maintenanceDate",
+datediff(q.maintenanceDate,now()) AS "distanceDays"
+	</sql> 
+  
+  
+  
+<!--   查询当前登录所属待办任务（巡检） -->
+  <select id="findList" resultType="sz.zp.cks.model.EquipmentRepairT" parameterType="sz.zp.cks.entity.EquipmentRepair" >
+		SELECT 
+			<include refid="equipmentRepairTColumns"/>
+	FROM equipmentRepair r, equipment q
+	WHERE r.ep_id = q.epId and r.ep_ac_nextuser=#{epAcNextuser} and r.ep_type=#{epType} 	
+	ORDER BY r.last_updated_date ,r.creation_date desc
+  </select>      
+       
+ <select id="findAllList" resultType="sz.zp.cks.model.EquipmentRepairT" >
+		SELECT 
+			<include refid="equipmentRepairTColumns2"/>
+	FROM equipmentRepair r, equipment q
+	WHERE r.ep_id = q.epId  	
+	ORDER BY r.epr_ck_time   desc
+  </select>         
+       
+       
+       
+     
+   	<update id="update">
+		UPDATE equipmentRepair SET 
+		ep_id = #{epId} ,
+		ep_type = #{epType} ,
+		user_id = #{userId} ,
+		epr_ck_time = #{eprCkTime} ,
+		epr_ck_video = #{eprCkVideo} ,
+		epr_ck_photo = #{eprCkPhoto} ,
+		epr_ck_describe = #{eprCkDescribe} ,
+		epr_ck_level = #{eprCkLevel} ,
+		ep_home_equtype = #{epHomeEqutype}  ,
+		ep_home_equname= #{epHomeEquname} ,
+		ep_re_no= #{epReNo} ,
+		ep_re_id= #{epReId} ,
+		ep_re_kind= #{epReKind} ,
+		ep_re_group= #{epReGroup} ,
+		ep_re_describe= #{epReDescribe} ,
+		ep_re_time= #{epReTime} ,
+		ep_re_status= #{epReStatus} ,
+		created_by= #{createdBy} ,
+		creation_date= #{creationDate} ,
+		last_updated_by= #{lastUpdatedBy} ,
+		last_updated_date= #{lastUpdatedDate} ,
+		ep_ac_status= #{epAcStatus} ,
+		ep_ac_nowid= #{epAcNowid} ,
+		ep_ac_nowuser= #{epAcNowuser} ,
+		ep_ac_nextid= #{epAcNextid} ,
+		ep_ac_nextuser= #{epAcNextuser} ,
+		maintenance_date= #{maintenanceDate} ,
+		distanceDays= #{distanceDays}
+		WHERE
+		equipmentRepair_id = #{equipmentrepairId} 
+	</update>   
+     
+       
+  <!-- zdy  查询当前登录所属待办任务（业主） -->
+  <select id="findOwnerList" resultType="sz.zp.cks.model.EquipmentRepairO" parameterType="sz.zp.cks.entity.EquipmentRepair" >
+		SELECT 
+			<include refid="equipmentRepairOColumns"/>
+	FROM equipmentRepair r
+	WHERE r.ep_ac_nextuser=#{epAcNextuser} and r.ep_type=#{epType} 	
+	ORDER BY STR_TO_DATE(r.epr_ck_time, '%Y-%m-%d %H:%i:%s' ) desc
+  </select>  
+  
+  <!-- zdy  查询当前登录所属待办任务（业主）总数 -->
+  <select id="findOwnerCount" resultType="int" parameterType="Map">
+  	SELECT COUNT(*)
+	FROM equipmentRepair r
+	WHERE r.ep_ac_nextuser=#{epAcNextuser} and r.ep_type=#{epType} 
+
+  </select>
+  
+  
+  	  <!--zdy  待办任务点击查询（业主） -->
+        <select id="qryOwnerById" parameterType="String" resultType="sz.zp.cks.model.EquipmentRepairO">
+		SELECT 
+			<include refid="equipmentRepairOColumns"/>
+	FROM equipmentRepair r
+	WHERE r.equipmentRepair_id =#{equipmentrepairId} 
+       
+       </select>
+         
+  <sql id="equipmentRepairOColumns">
+
+	r.equipmentRepair_id AS "equipmentrepairId", -- id
+	r.ep_id AS "epId", -- 设备编号
+	r.ep_type AS "epType", -- 报修类别
+	r.user_id AS "userId", -- 报修人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.user_id
+	) AS "userIdName", -- 报修人名称
+    (
+		SELECT
+			u.mobile
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.user_id
+
+	) AS "mobile", -- 报修人电话
+	r.epr_ck_time AS "eprCkTime", -- 报修时间
+	r.epr_ck_photo AS "eprCkPhoto", -- 故障情况拍照
+	(
+
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'epr_ck_level'
+				AND d.
+				VALUE
+					= r.epr_ck_level
+
+	)
+	AS "eprCkLevel", -- 故障等级
+	r.epr_ck_describe AS "eprCkDescribe", -- 故障情况描述
+	(
+
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = 'ep_home_equtype'
+				AND d.
+				VALUE
+					= r.ep_home_equtype
+
+	) AS "epHomeEqutype",
+	-- 设备类型
+	(
+	
+				SELECT
+					d.label
+				FROM
+					sys_dict d
+				WHERE
+					d.type = r.ep_home_equtype
+				AND d.
+				VALUE
+					= r.ep_home_equname
+	) AS "epHomeEquname", -- 设备名称
+	
+    r.ep_re_id AS "epReId", -- 维修责任人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_re_id
+	) AS "epReIdName", -- 维修责任人名称
+	(
+		SELECT
+			u.mobile
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_re_id
+	) AS "reMobile", -- 维修责任人电话
+    r.ep_re_kind AS "epReKind", -- 故障类别
+    r.ep_re_describe AS "epReDescribe", -- 维修情况说明
+    r.ep_re_time AS "epReTime", -- 维修完成时间
+    r.ep_re_status AS "epReStatus", -- 设备状态
+
+    r.created_by AS "createdBy",-- 创建人
+    r.creation_date AS "creationDate",-- 创建时间
+    r.creation_date AS "lastUpdatedBy",-- 更新人
+    r.creation_date AS "lastUpdatedDate",-- 更新时间
+
+    r.ep_ac_status AS "epAcStatus", -- 流程状态
+
+
+    r.ep_ac_nowid AS "epAcNowid", -- 当前节点
+    r.ep_ac_nowuser AS "epAcNowuser", -- 当前负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nowuser
+	) AS "epAcNowuserName", -- 当前负责人名称
+
+    r.ep_ac_nextid AS "epAcNextid", -- 下个节点
+    r.ep_ac_nextuser AS "epAcNextuser", -- 下个节点负责人
+	(
+		SELECT
+			u.user_name
+		FROM
+			USER u
+		WHERE
+			u.user_id = r.ep_ac_nextuser
+	) AS "epAcNextuserName" ,-- 下个节点负责人名称		
+   (
+		SELECT
+			o.own_location
+		FROM
+			OWNER o
+		WHERE
+			o.user_id = r.user_id
+	) AS "epLocation" -- 安装地点	
+	</sql>      
+	 
+       <select id="queryByEpId" parameterType="String" resultType="EquipmentRepair">
+       select e.equipmentRepair_id as "equipmentrepairId",ep_id as "epId",ep_type as "epType",
+       user_id as "userId",epr_ck_time as "eprCkTime",epr_ck_video as "eprCkVideo",epr_ck_photo as "eprCkPhoto",
+       epr_ck_describe as "eprCkDescribe", epr_ck_level as "eprCkLevel", ep_home_equtype as "epHomeEqutype",
+       ep_home_equname as "epHomeEquname", ep_re_no as "epReNo", ep_re_id as "epReId",ep_re_kind as "epReKind",
+       ep_re_group as "epReGroup",ep_re_describe as "epReDescribe",ep_re_time as "epReTime",ep_re_status as "epReStatus",
+       created_by as "createdBy",creation_date as "creationDate",last_updated_by as "lastUpdatedBy",last_updated_date as "lastUpdatedDate",
+       ep_ac_status as "epAcStatus",ep_ac_nowid as "epAcNowid",ep_ac_nowuser as "epAcNowuser",ep_ac_nextid as "epAcNextid"
+       ,ep_ac_nextuser as "epAcNextuser"
+       from equipmentrepair e where e.ep_id =#{epId}  and e.ep_ac_nextid !='5' and e.ep_ac_status !='2'   order by e.epr_ck_time
+       </select>  
+       
+<!--        首页柱状图 -->
+      <select id="qryCountsByMonth" resultType="sz.zp.cks.model.MonthReCounts" >
+		select '一月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =1 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =1 and ep_type=2)as'ownCounts'
+		 union all
+		select '二月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =2 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =2 and ep_type=2)as'ownCounts'
+		union all
+		select '三月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =3 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =3 and ep_type=2)as'ownCounts'
+		 union all
+		select '四月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =4 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =4 and ep_type=2)as'ownCounts'
+		 union all
+		select '五月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =5 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =5 and ep_type=2)as'ownCounts'
+		 union all
+		select '六月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =6 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =6 and ep_type=2)as'ownCounts'
+		union all
+		select '七月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =7 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =7 and ep_type=2)as'ownCounts'
+		 union all
+		select '八月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =8 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =8 and ep_type=2)as'ownCounts'
+		 union all
+		select '九月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =9 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =9 and ep_type=2)as'ownCounts'
+		 union all
+		select '十月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =10 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =10 and ep_type=2)as'ownCounts'
+		 union all
+		select '十一月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =11 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =11 and ep_type=2)as'ownCounts'
+		 union all
+		select '十二月' as 'month',
+					(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =12 and ep_type=1)as 'ckCounts' ,(select count(equipmentRepair_id) from EquipmentRepair where MONTH(epr_ck_time) =12 and ep_type=2)as'ownCounts'
+
+ 	 </select>    
+<!--        首页第一行 -->
+     <select id="selectForMainJspValue" resultType="sz.zp.cks.model.MainJspValue" >
+		select 
+		(select count(DISTINCT(ep_id)) from electricalCheck where DATE_FORMAT(checks_time,'%Y-%m-%d')=CURDATE() ) as 'todayCks', -- 今日已检
+		(select count(DISTINCT(ep_id)) from equipmentRepair where DATE_FORMAT(epr_ck_time,'%Y-%m-%d')=CURDATE() ) as 'todayRps', -- 今日报修
+		(select count(*) from status where status_val='1' )   as 'normalOperation' , -- 正常运行设备台数
+		(select count(*) from status where status_val!='1')  as 'unNormalOperation' , -- 非正常运行设备台数
+		(select count(*) from status where status_val ='2' )  as 'abnormalOperation',-- 异常运行设备台数
+		(select count(*) from status where status_val ='3' )  as 'repairOperation',-- 停机维修设备台数
+		(select count(*) from status where status_val ='4' )  as 'scrapOperation',-- 报废停用设备台数
+		(select count(*) from equipmentRepair where ep_ac_nextid !='5'and ep_type='1')  as 'maintenanceState'-- 维修中设备台数
+	     ;     
+     
+ 	 </select>
+ 	     
+<!--        各巡检人员设备分布 -->
+      <select id="qryUserEpTypeCount" resultType="sz.zp.cks.model.UserEpTypeCounts" >
+SELECT
+	t.login_name AS 'userName',
+	(
+		SELECT
+			count(*)
+		FROM
+			equipment e,
+			epuser r,
+			USER u
+		WHERE
+			e.epUserId = r.epUserId
+		AND r.userId = u.user_id
+		AND e.epType = '1'
+		AND u.user_id = t.userId
+	) AS 'electricalEp',
+	(
+		SELECT
+			count(*)
+		FROM
+			equipment e,
+			epuser r,
+			USER u
+		WHERE
+			e.epUserId = r.epUserId
+		AND r.userId = u.user_id
+		AND e.epType = '2'
+		AND u.user_id = t.userId
+	) AS 'productEp',
+	(
+		SELECT
+			count(*)
+		FROM
+			equipment e,
+			epuser r,
+			USER u
+		WHERE
+			e.epUserId = r.epUserId
+		AND r.userId = u.user_id
+		AND e.epType = '3'
+		AND u.user_id = t.userId
+	) AS 'fireEp',
+	(
+		SELECT
+			count(*)
+		FROM
+			equipment e,
+			epuser r,
+			USER u
+		WHERE
+			e.epUserId = r.epUserId
+		AND r.userId = u.user_id
+		AND e.epType = '4'
+		AND u.user_id = t.userId
+	) AS 'testEp',
+	(
+		SELECT
+			count(*)
+		FROM
+			equipment e,
+			epuser r,
+			USER u
+		WHERE
+			e.epUserId = r.epUserId
+		AND r.userId = u.user_id
+		AND e.epType = '5'
+		AND u.user_id = t.userId
+	) AS 'publicEp',	
+	(
+		SELECT
+			count(*)
+		FROM
+			electricalCheck k
+		WHERE
+			DATE_FORMAT(k.checks_time, '%Y-%m-%d') = CURDATE()
+		AND k.user_id = t.userId
+	) AS 'todayCks'
+FROM
+	(
+		SELECT DISTINCT
+			(r.userId),
+			u.login_name
+		FROM
+			epuser r,
+			USER u
+		WHERE
+			r.userId = u.user_id
+		ORDER BY
+			r.userId DESC
+	) t
+ 
+ 	 </select>      
+     
+     <!-- 统计 zdy --> 
+     <select id="qryEpTypeValue" resultType="sz.zp.cks.model.StaticJspValue" >
+     select '1' as 'epType',
+      (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			electricalCheck e,
+			equipment p
+		WHERE
+			e.ep_id = p.epId
+	    AND DATE_FORMAT(e.checks_time,'%Y-%m-%d')=CURDATE()
+	    AND p.epType='1'  
+	  )as 'todayChecked',
+	  ((
+		SELECT
+			count(*)
+		FROM
+			equipment p
+		WHERE
+	    p.epType='1'
+	  )-(
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			electricalCheck e,
+			equipment p
+		WHERE
+			e.ep_id = p.epId
+	    AND DATE_FORMAT(e.checks_time,'%Y-%m-%d')=CURDATE()
+	    AND p.epType='1'
+	  ))as 'todayUnChecked'
+	 union all
+	 select '2' as 'epType',
+      (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			electricalCheck e,
+			equipment p
+		WHERE
+			e.ep_id = p.epId
+	    AND DATE_FORMAT(e.checks_time,'%Y-%m-%d')=CURDATE()
+	    AND p.epType='2'  
+	  )as 'todayChecked',
+	  ((
+		SELECT
+			count(*)
+		FROM
+			equipment p
+		WHERE
+	    p.epType='2'
+	  )-(
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			electricalCheck e,
+			equipment p
+		WHERE
+			e.ep_id = p.epId
+	    AND DATE_FORMAT(e.checks_time,'%Y-%m-%d')=CURDATE()
+	    AND p.epType='2'
+	  ))as 'todayUnChecked'
+	 union all
+	 select '3' as 'epType',
+      (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			electricalCheck e,
+			equipment p
+		WHERE
+			e.ep_id = p.epId
+	    AND DATE_FORMAT(e.checks_time,'%Y-%m-%d')=CURDATE()
+	    AND p.epType='3'  
+	  )as 'todayChecked',
+	  ((
+		SELECT
+			count(*)
+		FROM
+			equipment p
+		WHERE
+	    p.epType='3'
+	  )-(
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			electricalCheck e,
+			equipment p
+		WHERE
+			e.ep_id = p.epId
+	    AND DATE_FORMAT(e.checks_time,'%Y-%m-%d')=CURDATE()
+	    AND p.epType='3'
+	  ))as 'todayUnChecked'
+	  union all
+	  select '4' as 'epType',
+      (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			electricalCheck e,
+			equipment p
+		WHERE
+			e.ep_id = p.epId
+	    AND DATE_FORMAT(e.checks_time,'%Y-%m-%d')=CURDATE()
+	    AND p.epType='4'  
+	  )as 'todayChecked',
+	  ((
+		SELECT
+			count(*)
+		FROM
+			equipment p
+		WHERE
+	    p.epType='4'
+	  )-(
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			electricalCheck e,
+			equipment p
+		WHERE
+			e.ep_id = p.epId
+	    AND DATE_FORMAT(e.checks_time,'%Y-%m-%d')=CURDATE()
+	    AND p.epType='4'
+	  ))as 'todayUnChecked'	 
+ 	 </select>
+ 	 
+ 	 
+     <select id="qryCountByDate" resultType="sz.zp.cks.model.CksDayReCounts" >
+        select '6' as 'day',
+					(select count(*) from  electricalCheck e  where date(checks_time) = date_sub(curdate(),interval 6 day)) as 'ckdayCounts'
+		 union all
+		select '5' as 'day',
+					(select count(*) from  electricalCheck e  where date(checks_time) = date_sub(curdate(),interval 5 day))as 'ckdayCounts'
+		union all
+		select '4' as 'day',
+					(select count(*) from  electricalCheck e  where date(checks_time) = date_sub(curdate(),interval 4 day)) as 'ckdayCounts'
+		 union all
+		select '3' as 'day',
+					(select count(*) from  electricalCheck e  where date(checks_time) = date_sub(curdate(),interval 3 day)) as 'ckdayCounts'
+		 union all
+		select '2' as 'day',
+					(select count(*) from  electricalCheck e  where date(checks_time) = date_sub(curdate(),interval 2 day)) as 'ckdayCounts'
+		 union all
+		select '1' as 'day',
+					(select count(*) from  electricalCheck e  where date(checks_time) = date_sub(curdate(),interval 1 day)) as 'ckdayCounts'
+		union all
+		select '0' as 'day',
+					(select count(*) from  electricalCheck e  where date(checks_time) = date_sub(curdate(),interval 0 day)) as 'ckdayCounts' 
+          
+     </select>
+     
+     <select id="qryCountByWeek" resultType="sz.zp.cks.model.RepairCounts" >
+     SELECT
+     	(
+		SELECT
+			count(*)
+		FROM
+			equipmentrepair
+		WHERE
+			YEARWEEK(date_format(epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+		AND ep_type='1'
+	    ) as 'weekCounts',
+	   (
+		SELECT
+			count(*)
+		FROM
+			equipmentrepair
+		WHERE
+			YEARWEEK(date_format(epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+		AND ep_type='1'
+		AND ep_ac_nextid='5'
+	   ) as 'endCounts',
+	   (
+		SELECT
+			count(*)
+		FROM
+			equipmentrepair
+		WHERE
+			YEARWEEK(date_format(epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+		AND ep_type='1'
+		AND ep_ac_nextid!='5'
+	   )  as 'underwayCounts',
+	   (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			equipmentrepair e,
+			equipment p
+		WHERE
+		e.ep_id = p.epId
+		AND	YEARWEEK(date_format(e.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+		AND e.ep_type='1'
+		AND p.epType='1'
+	   )  as 'electricalEpCounts',
+	   (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			equipmentrepair e,
+			equipment p
+		WHERE
+		e.ep_id = p.epId
+		AND	YEARWEEK(date_format(e.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+		AND e.ep_type='1'
+		AND p.epType='2'
+	   )  as 'productEpCounts',
+	   (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			equipmentrepair e,
+			equipment p
+		WHERE
+		e.ep_id = p.epId
+		AND	YEARWEEK(date_format(e.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+		AND e.ep_type='1'
+		AND p.epType='3'
+	   )  as 'fireEpCounts',
+	   (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			equipmentrepair e,
+			equipment p
+		WHERE
+		e.ep_id = p.epId
+		AND	YEARWEEK(date_format(e.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+		AND e.ep_type='1'
+		AND p.epType='4'
+	   )  as 'pumpEpCounts',
+	   (
+		SELECT
+			count(DISTINCT(e.ep_id))
+		FROM
+			equipmentrepair e,
+			equipment p
+		WHERE
+		e.ep_id = p.epId
+		AND	YEARWEEK(date_format(e.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+		AND e.ep_type='1'
+		AND p.epType='5'
+	   )  as 'publicEpCounts'	   
+     </select>
+     
+
+     <select id="qryByWeek"  resultType="sz.zp.cks.model.EquipmentRepairT">
+		SELECT 
+			<include refid="equipmentRepairTColumns"/>
+	FROM equipmentRepair r, equipment q
+	WHERE r.ep_id = q.epId and  YEARWEEK(date_format(r.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now())
+    AND r.ep_type='1'  ORDER BY STR_TO_DATE(r.epr_ck_time, '%Y-%m-%d %H:%i:%s' )  desc  
+     </select>
+     
+     
+     <select id="selectForOwnerStatic" resultType="sz.zp.cks.model.OwnerStaticJspValue" >
+		select 
+		(select count(*) from equipmentRepair where DATE_FORMAT(epr_ck_time,'%Y-%m-%d')=CURDATE() and ep_type=2) as 'todayRepCount', -- 今日报修工单数
+		(select count(*) from equipmentRepair where DATE_FORMAT(epr_ck_time,'%Y-%m-%d')=CURDATE() and ep_type=2 and ep_ac_nextid=5) as 'todayComRepCount', -- 今日完成的工单数
+		(select count(*) from equipmentRepair where DATE_FORMAT(epr_ck_time,'%Y-%m-%d')=CURDATE() and ep_type=2 and ep_home_equtype='private_epName' and ep_ac_nextid=5)   as 'privateRepCount' , -- 今日家电报修工单数
+		(select count(*) from equipmentRepair where DATE_FORMAT(epr_ck_time,'%Y-%m-%d')=CURDATE() and ep_type=2 and ep_home_equtype='public_epName' and ep_ac_nextid=5)   as 'publicRepCount' , -- 今日公共设备报修工单数
+		(select count(*) from equipmentRepair where DATE_FORMAT(epr_ck_time,'%Y-%m-%d')=CURDATE() and ep_type=2 and ep_home_equtype='private_epName' and ep_ac_nextid!=5)   as 'privateUnRepCount' , -- 今日家电报修未完成工单数
+		(select count(*) from equipmentRepair where DATE_FORMAT(epr_ck_time,'%Y-%m-%d')=CURDATE() and ep_type=2 and ep_home_equtype='public_epName' and ep_ac_nextid!=5)   as 'publicUnRepCount' , -- 今日公共设备报修未完成工单数
+		(select count(*) from equipmentRepair where YEARWEEK(date_format(epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now()) and ep_type=2) as 'weekRepCount', -- 本周报修工单数
+		(select count(*) from equipmentRepair where YEARWEEK(date_format(epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now()) and ep_type=2 and ep_ac_nextid=5) as 'weekComRepCount', -- 本周完成的报修工单数
+		(select count(*) from equipmentRepair where YEARWEEK(date_format(epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now()) and ep_type=2 and ep_ac_nextid!=5) as 'weekUnCRepCount',-- 本周进行中的报修工单数	     
+	    (select count(*) from equipmentRepair e,user u,owner o
+	    where YEARWEEK(date_format(e.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now()) and e.ep_type=2
+	    and e.user_id=u.user_id 
+	    and u.user_id=o.user_id
+	    and o.own_loc=1
+	    ) as 'weekLRepCount',
+	    (select count(*) from equipmentRepair e,user u,owner o
+	    where YEARWEEK(date_format(e.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now()) and e.ep_type=2
+	    and e.user_id=u.user_id 
+	    and u.user_id=o.user_id
+	    and o.own_loc=2
+	    ) as 'weekTRepCount',
+	    (select count(*) from equipmentRepair e,user u,owner o
+	    where YEARWEEK(date_format(e.epr_ck_time,'%Y-%m-%d')) = YEARWEEK(now()) and e.ep_type=2
+	    and e.user_id=u.user_id 
+	    and u.user_id=o.user_id
+	    and o.own_loc=3
+	    ) as 'weekRRepCount'
+	    ;
+ 	 </select>
+<!--        业主系统统计页柱状图 --> 	 
+ 	    <select id="qryCountsByepName" resultType="sz.zp.cks.model.OwnerTypeCounts" >
+		select '空调' as 'epName',
+			   (
+			    SELECT count(*)			   
+			    FROM  equipmentRepair r
+				WHERE
+					r.ep_home_equtype='private_epName'
+				AND r.ep_home_equname='1'
+				AND 
+				DATE_FORMAT(r.epr_ck_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+                ) as 'counts'
+		union all  
+		select '冰箱' as 'epName',
+			   (
+			    SELECT count(*)			   
+			    FROM  equipmentRepair r
+				WHERE
+					r.ep_home_equtype='private_epName'
+				AND r.ep_home_equname='2'
+				AND 
+				DATE_FORMAT(r.epr_ck_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+                ) as 'counts'
+		union all
+		select '洗衣机' as 'epName',
+			   (
+			    SELECT count(*)			   
+			    FROM  equipmentRepair r
+				WHERE
+					r.ep_home_equtype='private_epName'
+				AND r.ep_home_equname='3'
+				AND 
+				DATE_FORMAT(r.epr_ck_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+                ) as 'counts'
+		 union all
+		select '电视机' as 'epName',
+			   (
+			    SELECT count(*)			   
+			    FROM  equipmentRepair r
+				WHERE
+					r.ep_home_equtype='private_epName'
+				AND r.ep_home_equname='4'
+				AND 
+				DATE_FORMAT(r.epr_ck_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+                ) as 'counts'
+
+		 union all
+		select '热水器' as 'epName',
+			   (
+			    SELECT count(*)			   
+			    FROM  equipmentRepair r
+				WHERE
+					r.ep_home_equtype='private_epName'
+				AND r.ep_home_equname='5'
+				AND 
+				DATE_FORMAT(r.epr_ck_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+                ) as 'counts'
+		 union all
+		select '楼道灯' as 'epName',
+			   (
+			    SELECT count(*)			   
+			    FROM  equipmentRepair r
+				WHERE
+					r.ep_home_equtype='public_epName'
+				AND r.ep_home_equname='1'
+				AND 
+				DATE_FORMAT(r.epr_ck_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+                ) as 'counts'
+
+		union all
+		select '楼道消防器材' as 'epName',
+				(
+			    SELECT count(*)			   
+			    FROM  equipmentRepair r
+				WHERE
+					r.ep_home_equtype='public_epName'
+				AND r.ep_home_equname='2'
+				AND 
+				DATE_FORMAT(r.epr_ck_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+                ) as 'counts'
+         union all
+         select '电梯' as 'epName',
+				(
+			    SELECT count(*)			   
+			    FROM  equipmentRepair r
+				WHERE
+					r.ep_home_equtype='public_epName'
+				AND r.ep_home_equname='3'
+				AND 
+				DATE_FORMAT(r.epr_ck_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+                ) as 'counts'
+ 	 </select>
+ 	 
+ 	 <!--   zdy --> 	
+ 	 <select id="findByEpId" parameterType="String" resultType="sz.zp.cks.model.EquipmentRepairT">
+		SELECT 
+			<include refid="equipmentRepairTColumns"/>
+	FROM equipmentRepair r, equipment q
+	WHERE r.ep_id = q.epId and  q.epId=#{epId} 
+    ORDER BY STR_TO_DATE(r.epr_ck_time, '%Y-%m-%d %H:%i:%s' ) desc   
+      </select>
+      
+       
+     <!--   zdy --> 
+     <select id="getAllEquipmentRepairs" resultType="EquipmentRepair">
+	SELECT e.equipmentRepair_id as "equipmentrepairId",ep_id as "epId",ep_type as "epType",
+       user_id as "userId",epr_ck_time as "eprCkTime",epr_ck_video as "eprCkVideo",epr_ck_photo as "eprCkPhoto",
+       epr_ck_describe as "eprCkDescribe", epr_ck_level as "eprCkLevel", ep_home_equtype as "epHomeEqutype",
+       ep_home_equname as "epHomeEquname", ep_re_no as "epReNo", ep_re_id as "epReId",ep_re_kind as "epReKind",
+       ep_re_group as "epReGroup",ep_re_describe as "epReDescribe",ep_re_time as "epReTime",ep_re_status as "epReStatus",
+       created_by as "createdBy",creation_date as "creationDate",last_updated_by as "lastUpdatedBy",last_updated_date as "lastUpdatedDate",
+       ep_ac_status as "epAcStatus",ep_ac_nowid as "epAcNowid",ep_ac_nowuser as "epAcNowuser",ep_ac_nextid as "epAcNextid"
+       ,ep_ac_nextuser as "epAcNextuser",maintenance_date as "maintenanceDate" ,distanceDays as "distanceDays"
+	FROM equipmentRepair e
+	WHERE e.ep_type = '1'
+    ORDER BY STR_TO_DATE(e.epr_ck_time, '%Y-%m-%d %H:%i:%s' ) desc   
+      </select>
+
+	<select id="queryByStatusAndEpid" parameterType="Map"  resultType="EquipmentRepair">
+		select e.equipmentRepair_id as "equipmentrepairId",ep_id as "epId",ep_type as "epType",
+		user_id as "userId",epr_ck_time as "eprCkTime",epr_ck_video as "eprCkVideo",epr_ck_photo as "eprCkPhoto",
+		epr_ck_describe as "eprCkDescribe", epr_ck_level as "eprCkLevel", ep_home_equtype as "epHomeEqutype",
+		ep_home_equname as "epHomeEquname", ep_re_no as "epReNo", ep_re_id as "epReId",ep_re_kind as "epReKind",
+		ep_re_group as "epReGroup",ep_re_describe as "epReDescribe",ep_re_time as "epReTime",ep_re_status as "epReStatus",
+		created_by as "createdBy",creation_date as "creationDate",last_updated_by as "lastUpdatedBy",last_updated_date as "lastUpdatedDate",
+		ep_ac_status as "epAcStatus",ep_ac_nowid as "epAcNowid",ep_ac_nowuser as "epAcNowuser",ep_ac_nextid as "epAcNextid"
+		,ep_ac_nextuser as "epAcNextuser"
+		from equipmentRepair e
+		<where>
+			<if test="epId!=null and epId!=''">
+				and e.ep_id =#{epId}
+			</if>
+			<if test="epAcStatus!=null and epAcStatus!=''">
+				and e.ep_ac_status =#{epAcStatus}
+			</if>
+		</where>
+	</select>
+	<update id="updateDescribe">
+		update equipmentRepair
+		set epr_ck_describe=concat(epr_ck_describe,#{eprCkDescribe})
+		where ep_id=#{epId}
+		AND  ep_ac_status ='1'
+	</update>
+ 	 <select id="getNums" resultType="sz.zp.cks.model.PerscentCounts">
+		select 
+		(select count(*) from electricalcheck) as 'cksNum',
+		(select count(*) from equipmentrepair where  ep_ac_status='2') as 'repNum',
+		(select count(*) from electricalmaintain where  complete_or_not='Y') as 'matNum'	
+      </select>
+      
+    	 <select id="getDaanCount" resultType="sz.zp.cks.model.DaanCount">
+select DATE_FORMAT( CURDATE( ) , '%Y-%m-%d' ) as today ,DATE_SUB(CURDATE(),INTERVAL 1 DAY) as yes ,date_add(DATE(now()),interval -1 year) as lastday ,
+(SELECT count(*) FROM electricalcheck WHERE DATE_FORMAT( checks_time, '%Y%m%d' ) = DATE_FORMAT( CURDATE( ) , '%Y%m%d' )) as todaycks,
+(SELECT count(*) FROM equipmentrepair WHERE DATE_FORMAT( epr_ck_time, '%Y%m%d' ) = DATE_FORMAT( CURDATE( ) , '%Y%m%d' )) as todayrep,
+(SELECT count(*) FROM electricalmaintain WHERE DATE_FORMAT( creation_date, '%Y%m%d' ) = DATE_FORMAT( CURDATE( ) , '%Y%m%d' ))  as todaymat,
+
+(SELECT count(*) FROM electricalcheck WHERE PERIOD_DIFF( date_format( now( ) , '%Y%m%d' ) , date_format( checks_time, '%Y%m%d' ) ) =1) as yescks,
+(SELECT count(*) FROM equipmentrepair WHERE PERIOD_DIFF( date_format( now( ) , '%Y%m%d' ) , date_format( epr_ck_time, '%Y%m%d' ) ) =1) as yesrep,
+(SELECT count(*) FROM electricalmaintain WHERE PERIOD_DIFF( date_format( now( ) , '%Y%m%d' ) , date_format( creation_date, '%Y%m%d' ) ) =1) as yesmat,
+
+(SELECT count(*) FROM electricalcheck WHERE DATE_FORMAT( checks_time, '%Y-%m-%d' ) = date_add(DATE(now()),interval -1 year)) as lastcks,
+(SELECT count(*) FROM equipmentrepair WHERE DATE_FORMAT( epr_ck_time, '%Y-%m-%d' ) = date_add(DATE(now()),interval -1 year) )as lastrep,
+(SELECT count(*) FROM electricalmaintain WHERE DATE_FORMAT( creation_date, '%Y-%m-%d' ) = date_add(DATE(now()),interval -1 year)) as lastmat
+	
+      </select>   
+      
+</mapper>

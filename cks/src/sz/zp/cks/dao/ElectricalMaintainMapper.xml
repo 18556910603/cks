@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="sz.zp.cks.dao.ElectricalMaintainMapper" >
+  <resultMap id="electricalMaintainResultMap" type="sz.zp.cks.entity.ElectricalMaintain" >
+    <id column="maintain_id" property="maintainId" jdbcType="VARCHAR" />
+    <result column="checks_id" property="checksId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="maintain_describe" property="maintainDescribe" jdbcType="VARCHAR" />
+    <result column="maintain_time" property="maintainTime" jdbcType="VARCHAR" />
+    <result column="clear" property="clear" jdbcType="VARCHAR" />
+    <result column="line" property="line" jdbcType="VARCHAR" />
+    <result column="oil" property="oil" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="creation_date" property="creationDate" jdbcType="VARCHAR" />
+    <result column="last_updated_by" property="lastUpdatedBy" jdbcType="VARCHAR" />
+    <result column="last_updated_date" property="lastUpdatedDate" jdbcType="VARCHAR" />
+    <result column="ep_id" property="epId" jdbcType="VARCHAR" />
+    <result column="re_type" property="reType" jdbcType="VARCHAR" />
+    <result column="complete_or_not" property="completeOrNot" jdbcType="VARCHAR" />
+    
+    <result column="maintenance_date" property="maintenanceDate" jdbcType="VARCHAR" />
+    <result column="distanceDays" property="distanceDays" jdbcType="VARCHAR" />
+    <result column="leader_id" property="leaderId" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <insert id="insert" parameterType="sz.zp.cks.entity.ElectricalMaintain" >
+    insert into electricalmaintain (maintain_id, checks_id, user_id, 
+      maintain_describe, maintain_time, clear, 
+      line, oil, created_by, 
+      creation_date, last_updated_by, last_updated_date, ep_id, re_type , complete_or_not , maintenance_date, distanceDays, leader_id
+      )
+    values (#{maintainId,jdbcType=VARCHAR}, #{checksId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{maintainDescribe,jdbcType=VARCHAR}, #{maintainTime,jdbcType=VARCHAR}, #{clear,jdbcType=VARCHAR}, 
+      #{line,jdbcType=VARCHAR}, #{oil,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{creationDate,jdbcType=VARCHAR}, #{lastUpdatedBy,jdbcType=VARCHAR}, #{lastUpdatedDate,jdbcType=VARCHAR}, #{epId,jdbcType=VARCHAR} , 
+      #{reType,jdbcType=VARCHAR}   ,  #{completeOrNot,jdbcType=VARCHAR}  ,  #{maintenanceDate,jdbcType=VARCHAR}  
+      ,  #{distanceDays,jdbcType=VARCHAR}   ,  #{leaderId,jdbcType=VARCHAR}  
+      )
+  </insert>
+  
+  <sql id="Base_Column_List" >
+ 	maintain_id AS 'maintainId',
+	checks_id AS 'checksId',
+	user_id AS 'userId',
+	(select r.login_name from user r  where user_id=t.user_id)AS 'userIdName',
+	maintain_describe AS 'maintainDescribe',
+	maintain_time AS 'maintainTime',
+	clear AS 'clear',
+	line AS 'line',
+	oil AS 'oil',
+	created_by AS 'createdBy',
+	creation_date AS 'creationDate',
+	last_updated_by AS 'lastUpdatedBy',
+	last_updated_date AS 'lastUpdatedDate',
+	ep_id AS 'epId',
+	re_type AS 'reType',
+	complete_or_not AS 'completeOrNot',
+	maintenance_date AS 'maintenanceDate',
+	distanceDays AS 'distanceDays',
+	leader_id AS 'leaderId',
+	(select r.login_name from user r  where user_id=t.leader_id)AS 'leaderIdName' 
+  </sql>  
+  
+  	<select id="findElectricalMaintainList" parameterType="Map" resultType="sz.zp.cks.model.ElectricalMaintainT" >
+    select 
+   <include refid="Base_Column_List" />
+    FROM electricalmaintain t
+	WHERE complete_or_not= #{completeOrNot,jdbcType=VARCHAR}
+	and re_type='3'
+	and user_id= #{userId,jdbcType=VARCHAR}
+    </select>
+ 	
+  <sql id="electricalMaintainTColumns" >
+ 	t.maintain_id AS 'maintainId',
+	t.checks_id AS 'checksId',
+	t.user_id AS 'userId',
+	(select r.login_name from user r  where user_id=t.user_id)AS 'userIdName',
+	t.maintain_describe AS 'maintainDescribe',
+	t.maintain_time AS 'maintainTime',
+	t.clear AS 'clear',
+	t.line AS 'line',
+	t.oil AS 'oil',
+	t.created_by AS 'createdBy',
+	t.creation_date AS 'creationDate',
+	t.last_updated_by AS 'lastUpdatedBy',
+	t.last_updated_date AS 'lastUpdatedDate',
+	t.ep_id AS 'epId',
+	t.re_type AS 'reType',
+	t.complete_or_not AS 'completeOrNot',
+	t.leader_id AS 'leaderId',
+	(select r.login_name from user r  where user_id=t.leader_id)AS 'leaderIdName',
+	 q.epName AS 'epName',
+	(select status_val from status where ep_id=q.epId) AS 'status',
+	(q.epModelNum) AS 'epModelNum',
+	(q.epLocation) AS 'epLocation',
+	(q.epType) AS 'epType',
+	 q.maintenanceDate AS 'maintenanceDate',
+	datediff(q.maintenanceDate,now()) AS "distanceDays"
+  </sql>   
+	  <!--待办任务点击查询 -->
+        <select id="qryById" parameterType="String" resultType="sz.zp.cks.model.ElectricalMaintainT">
+		SELECT 
+			<include refid="electricalMaintainTColumns"/>
+	from ElectricalMaintain t ,equipment q where t.ep_id=q.epId		
+	and  t.maintain_id =#{maintainId} 			
+       </select>    
+    
+   <update id="updateByPrimaryKey" parameterType="sz.zp.cks.entity.ElectricalMaintain" >
+    update electricalmaintain
+    set checks_id = #{checksId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      maintain_describe = #{maintainDescribe,jdbcType=VARCHAR},
+      maintain_time = #{maintainTime,jdbcType=VARCHAR},
+      clear = #{clear,jdbcType=VARCHAR},
+      line = #{line,jdbcType=VARCHAR},
+      oil = #{oil,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      creation_date = #{creationDate,jdbcType=VARCHAR},
+      last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
+      last_updated_date = #{lastUpdatedDate,jdbcType=VARCHAR},
+      ep_id = #{epId,jdbcType=VARCHAR},
+      re_type = #{reType,jdbcType=VARCHAR},
+      complete_or_not = #{completeOrNot,jdbcType=VARCHAR},
+      maintenance_date = #{maintenanceDate,jdbcType=VARCHAR},
+      distanceDays = #{distanceDays,jdbcType=VARCHAR},
+      leader_id = #{leaderId,jdbcType=VARCHAR}
+    where maintain_id = #{maintainId,jdbcType=VARCHAR}
+  </update> 
+  
+  
+  
+  <sql id="electricalMaintainTOColumns" >
+ 	t.maintain_id AS 'maintainId',
+	t.checks_id AS 'checksId',
+	t.user_id AS 'userId',
+	(select r.login_name from user r  where user_id=t.user_id)AS 'userIdName',
+	t.maintain_describe AS 'maintainDescribe',
+	t.maintain_time AS 'maintainTime',
+	t.clear AS 'clear',
+	t.line AS 'line',
+	t.oil AS 'oil',
+	t.created_by AS 'createdBy',
+	t.creation_date AS 'creationDate',
+	t.last_updated_by AS 'lastUpdatedBy',
+	t.last_updated_date AS 'lastUpdatedDate',
+	t.ep_id AS 'epId',
+	t.re_type AS 'reType',
+	t.complete_or_not AS 'completeOrNot',
+	t.leader_id AS 'leaderId',
+	(select r.login_name from user r  where user_id=t.leader_id)AS 'leaderIdName',
+	 q.epName AS 'epName',
+	(select status_val from status where ep_id=q.epId) AS 'status',
+	(q.epModelNum) AS 'epModelNum',
+	(q.epLocation) AS 'epLocation',
+	(q.epType) AS 'epType',
+	 t.maintenance_date AS 'maintenanceDate',
+	 t.distanceDays AS "distanceDays"
+  </sql>   
+	  <!--待办任务点击查询 -->
+        <select id="qryForComplete" parameterType="String" resultType="sz.zp.cks.model.ElectricalMaintainT">
+		SELECT 
+			<include refid="electricalMaintainTOColumns"/>
+	from ElectricalMaintain t ,equipment q where t.ep_id=q.epId		
+	and  t.maintain_id =#{maintainId} 			
+       </select>
+       
+       
+       
+   <sql id="findAllListColumnList" >
+ 	maintain_id AS 'maintainId',
+	checks_id AS 'checksId',
+	user_id AS 'userId',
+	(select r.user_name from user r  where user_id=t.user_id)AS 'userIdName',
+	maintain_describe AS 'maintainDescribe',
+	maintain_time AS 'maintainTime',
+	clear AS 'clear',
+	line AS 'line',
+	oil AS 'oil',
+	created_by AS 'createdBy',
+	creation_date AS 'creationDate',
+	last_updated_by AS 'lastUpdatedBy',
+	last_updated_date AS 'lastUpdatedDate',
+	ep_id AS 'epId',
+	re_type AS 'reType',
+	complete_or_not AS 'completeOrNot',
+	maintenance_date AS 'maintenanceDate',
+	distanceDays AS 'distanceDays',
+	leader_id AS 'leaderId',
+	(select r.user_name from user r  where user_id=t.leader_id)AS 'leaderIdName' 
+  </sql>  
+  
+  	<select id="findAll" resultType="sz.zp.cks.model.ElectricalMaintainT"  parameterType="String" >
+    select 
+   <include refid="findAllListColumnList" />
+    FROM electricalmaintain t
+	WHERE  re_type=#{reType} 		
+    </select>
+    
+   	<select id="findAllList" resultType="sz.zp.cks.model.ElectricalMaintainT">
+    select 
+   <include refid="findAllListColumnList" />
+    FROM electricalmaintain t
+    </select>   
+    
+    
+</mapper>

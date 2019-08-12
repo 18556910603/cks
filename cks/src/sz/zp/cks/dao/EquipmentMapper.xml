@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sz.zp.cks.dao.EquipmentMapper">
+  <resultMap id="BaseResultMap" type="sz.zp.cks.entity.Equipment">
+    <id column="epId" jdbcType="VARCHAR" property="epId" />
+    <result column="epName" jdbcType="VARCHAR" property="epName" />
+    <result column="epModelNum" jdbcType="VARCHAR" property="epModelNum" />
+    <result column="epLoc" jdbcType="VARCHAR" property="epLoc" />
+    <result column="epLocation" jdbcType="VARCHAR" property="epLocation" />
+    <result column="epType" jdbcType="VARCHAR" property="epType" />
+    <result column="epProducer" jdbcType="VARCHAR" property="epProducer" />
+    <result column="epProvider" jdbcType="VARCHAR" property="epProvider" />
+    <result column="epBuyingTime" jdbcType="VARCHAR" property="epBuyingTime" />
+    <result column="epUpTime" jdbcType="VARCHAR" property="epUpTime" />
+    <result column="epUserId" jdbcType="VARCHAR" property="epUserId" />
+    <result column="qrCode" jdbcType="VARCHAR" property="qrCode" />
+    <result column="createdBy" jdbcType="VARCHAR" property="createdBy" />
+    <result column="creationDate" jdbcType="VARCHAR" property="creationDate" />
+    <result column="lastUpdatedBy" jdbcType="VARCHAR" property="lastUpdatedBy" />
+    <result column="lastUpdatedDate" jdbcType="VARCHAR" property="lastUpdatedDate" />
+<!--设备下次规定保养日期 -->
+    <result column="maintenanceDate" jdbcType="VARCHAR" property="maintenanceDate" />
+  <!--地图上的地址 -->  
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+ 
+  
+  <insert id="create" parameterType="Equipment">
+    insert into equipment values(#{epId},#{epName},#{epModelNum},#{epLoc},#{epLocation},#{epType},
+    #{epProducer},#{epProvider},#{epBuyingTime},#{epUpTime},#{epUserId},#{qrCode},#{createdBy},#{creationDate},#{lastUpdatedBy},#{lastUpdatedDate},#{maintenanceDate},#{address})
+  </insert>
+  
+  
+  <delete id="delete" parameterType="String" flushCache="true">
+   delete from equipment where epId =#{epId}
+  </delete>
+    
+  <select id="load"  parameterType="String" resultType="Equipment">
+    select * from equipment e  where e.epId =#{epId}
+  </select>
+   
+  <update id="update" parameterType="Equipment">
+   update equipment set epName=#{epName},epModelNum=#{epModelNum},epLoc=#{epLoc },epLocation=#{epLocation},
+   epType=#{epType},epProducer=#{epProducer},epProvider=#{epProvider},epBuyingTime=#{epBuyingTime},epUpTime=#{epUpTime},epUserId=#{epUserId},
+   createdBy=#{createdBy},creationDate=#{creationDate},lastUpdatedBy=#{lastUpdatedBy},lastUpdatedDate=#{lastUpdatedDate},maintenanceDate=#{maintenanceDate},address=#{address}
+   where epId =#{epId}
+  </update>
+  
+  <update id="updateQRCode" parameterType="Equipment">
+   update equipment set qrCode=#{qrCode}
+   where epId =#{epId}
+  </update>
+  
+  <select id="list" resultType="Equipment">
+    select * from equipment 
+  </select>
+  
+
+   <select id="findAllCount" parameterType="Map" resultType="int">
+    select count(*) from equipment    
+   </select>
+   
+   <select id="findUpCount"  resultType="int">
+    select count(*) from equipment where epUpTime is not null
+   </select>
+  
+  <select id="findByPage" parameterType="Map" resultType="Equipment">
+    select * from equipment
+    limit ${(pageCode-1)*pageSize},${pageSize} 
+  </select> 
+
+  <select id="findAllEquipment"  resultType="Equipment">
+    select * from equipment    
+  </select>
+  <select id="findEpInfoByEpId" resultType="Equipment" parameterType="String">
+  	SELECT
+  		*
+  	FROM
+  		equipment
+  	WHERE
+  		equipment.epId=#{epId}
+  </select>
+    <select id="qryEpUser"  parameterType="String" resultType="sz.zp.cks.entity.User">
+    SELECT 
+    
+    <include refid="userRecordColumns"/>
+    
+    
+    from Equipment q,epuser p,user u where  q.epUserId=p.epUserId   and p.userId=u.user_id and q.epId=#{epId}
+  </select>
+  	<sql id="userRecordColumns">
+	u.user_id AS "userId",
+	u.user_name AS "userName",
+	u.login_name AS "loginName",
+	u.PASSWORD AS "password",
+	u.email AS "email",
+	u.mobile AS "mobile",
+	u.type AS "type",
+	u.employee_base_id AS "employeeBaseId",
+	u.STATUS AS "status",
+	u.created_by AS "createdBy",
+	u.creation_date AS "creationDate",
+	u.last_update_by AS "lastUpdateBy",
+	u.last_update_date AS "lastUpdateDate",
+	u.wx_open_id AS  "wxOpenId"
+	</sql>
+  
+  
+</mapper>
